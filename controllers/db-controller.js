@@ -8,8 +8,8 @@ const Financial = require("../models/Financial")
 // }
 
 const listData = async (req, res) => {
-	const post = await Financial.find()
-	try {
+    try {
+        const post = await Financial.find()
         res.send(post);
       } catch (error) {
         res.status(500).send(error);
@@ -17,8 +17,8 @@ const listData = async (req, res) => {
 }
 
 const addData = async (req, res) => {
-	const post = new Financial(req.body)
-	try {
+    try {
+        const post = new Financial(req.body)
         await post.save();
         res.send(post);
       } catch (error) {
@@ -27,21 +27,27 @@ const addData = async (req, res) => {
 }
 
 const patchData = async (req, res) => {
-    
     try {
-        const post = await Financial.findOne({ _id: req.body.id })
-        if (req.body.desc) {
-			post.desc = req.body.desc
-		}
+        const post = await Financial.findByIdAndUpdate(req.body.id , req.body)
         await post.save();
-        res.send(post.body);
+        res.send(req.body);
       } catch {
 		res.status(404)
 		res.send({ error: "Post doesn't exist!" })
 	}
 }
 
-module.exports = { addData, listData, patchData }
+const deleteData = async (req, res) => {
+    try {
+        await Financial.findByIdAndRemove(req.body.id)
+        res.status(204).send()
+      } catch {
+		res.status(404)
+		res.send({ error: "Post doesn't exist!" })
+	}
+}
+
+module.exports = { addData, listData, patchData, deleteData }
 
 // exports.addData = addData;
 // exports.listData = listData;

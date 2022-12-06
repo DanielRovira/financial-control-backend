@@ -1,6 +1,8 @@
 const mongoose = require("mongoose")
 
-const schema = mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const financialSchema = new Schema({
 	date: String,
 	desc: String,
     amount: Number,
@@ -9,4 +11,4 @@ const schema = mongoose.Schema({
     forn: String
 })
 
-module.exports = mongoose.model("Financial", schema, "financial-control-collection")
+module.exports = mongoose.model("Financial", financialSchema, "financial-control-collection")

@@ -1,12 +1,5 @@
 const Financial = require("../models/Financial")
 
-// const checkBody = (req,res,next) => {
-//     if ("_id" in req.body) {
-//         req.body._id = ObjectId(req.body._id)
-//     }
-//     next()
-// }
-
 const listData = async (req, res) => {
     try {
         const post = await Financial.find()

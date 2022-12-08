@@ -46,7 +46,7 @@ const login = async (req, res, next) => {
     return res.status(400).json({ message: "Inavlid Email / Password" });
   }
   const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "35s",
+    expiresIn: "3005s",
   });
 
   console.log("Generated Token\n", token);
@@ -57,7 +57,7 @@ const login = async (req, res, next) => {
 
   res.cookie(String(existingUser._id), token, {
     path: "/",
-    expires: new Date(Date.now() + 1000 * 300), // 300 seconds
+    expires: new Date(Date.now() + 1000 * 3000), // 3000 seconds
     httpOnly: true,
     sameSite: "lax",
   });
@@ -112,13 +112,13 @@ const refreshToken = (req, res, next) => {
     req.cookies[`${user.id}`] = "";
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "35s",
+      expiresIn: "3005s",
     });
     console.log("Regenerated Token\n", token);
 
     res.cookie(String(user.id), token, {
       path: "/",
-      expires: new Date(Date.now() + 1000 * 30), // 30 seconds
+      expires: new Date(Date.now() + 1000 * 3000), // 3000 seconds
       httpOnly: true,
       sameSite: "lax",
     });

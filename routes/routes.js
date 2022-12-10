@@ -11,9 +11,9 @@ const checkBody = (req,res,next) => {
     next()
 }
 
-router.get("/list", verifyToken, listData);
-router.post("/add", verifyToken, addData);
-router.patch("/update", verifyToken, checkBody, patchData);
-router.delete("/delete", verifyToken, checkBody, deleteData);
+router.get("/list/:id", verifyToken, listData);
+router.post("/add/:id", verifyToken, addData);
+router.patch("/update/:id", verifyToken, checkBody, patchData);
+router.delete("/delete/:id", verifyToken, checkBody, deleteData);
 
 module.exports = router

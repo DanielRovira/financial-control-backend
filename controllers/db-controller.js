@@ -1,8 +1,8 @@
-const Financial = require("../models/Financial")
+const routes = require("../models/Financial")
 
 const listData = async (req, res) => {
     try {
-        const post = await Financial.find()
+        const post = await routes[req.params.id].find()
         res.send(post);
       } catch (error) {
         res.status(500);
@@ -11,7 +11,7 @@ const listData = async (req, res) => {
 
 const addData = async (req, res) => {
     try {
-        const post = new Financial(req.body)
+        const post = new routes[req.params.id](req.body)
         await post.save();
         res.send(post);
       } catch (error) {
@@ -21,7 +21,7 @@ const addData = async (req, res) => {
 
 const patchData = async (req, res) => {
     try {
-        const post = await Financial.findByIdAndUpdate(req.body._id , req.body)
+        const post = await routes[req.params.id].findByIdAndUpdate(req.body._id , req.body)
         await post.save();
         res.send(req.body);
       } catch {
@@ -31,7 +31,7 @@ const patchData = async (req, res) => {
 
 const deleteData = async (req, res) => {
     try {
-        await Financial.findByIdAndRemove(req.body._id)
+        await routes[req.params.id].findByIdAndRemove(req.body._id)
         res.status(204).send()
       } catch {
 		res.status(404)

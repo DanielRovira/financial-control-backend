@@ -1,22 +1,22 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const userRoutes = require("./routes/user-routes");
-const router = require("./routes/routes");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-require("dotenv").config();
 const app = express();
+const userRoutes = require("./routes/user-routes");
+const financialControl = require("./routes/financial-control-routes");
+
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api", userRoutes);
-app.use("/api/A", router);
+app.use("/api/financial-control", financialControl);
 
 const connectionOptions = {
-    dbName: "financial-control",
+    dbName: process.env.DB,
     useUnifiedTopology: true
 }
-
 
 mongoose
   .connect(
@@ -25,7 +25,7 @@ mongoose
   )
 
 	.then(() => {
-		app.listen(3001, "127.0.0.1", () => {
+		app.listen(process.env.PORT, "127.0.0.1", () => {
 			console.log("Server has started!")
 		})})
         

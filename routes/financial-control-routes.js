@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const { listData, addData, patchData, deleteData } = require("../controllers/db-controller");
+const { listData, listSections, addData, patchData, deleteData } = require("../controllers/db-controller");
 const { verifyToken, getUser } = require("../controllers/user-controller");
 const { ObjectId } = require('mongodb')
 
@@ -12,6 +12,7 @@ const checkBody = (req,res,next) => {
 }
 
 router.get("/list/:id", verifyToken, listData);
+router.get("/sections", verifyToken, listSections);
 router.post("/add/:id", verifyToken, addData);
 router.patch("/update/:id", verifyToken, checkBody, patchData);
 router.delete("/delete/:id", verifyToken, checkBody, deleteData);

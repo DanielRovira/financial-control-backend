@@ -12,8 +12,14 @@ const financialSchema = new Schema({
     forn: String
 })
 
+const sectionslSchema = new Schema({
+    date: String
+})
+
 data.sections.map((section) => {
 
     module.exports[section.title] = mongoose.model(section.title, financialSchema, section.title)
 
 })
+
+module.exports.sections = mongoose.model("Sections", sectionslSchema, "sections")

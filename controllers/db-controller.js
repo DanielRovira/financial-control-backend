@@ -9,6 +9,15 @@ const listData = async (req, res) => {
       }
 }
 
+const listSections = async (req, res) => {
+    try {
+        const post = await routes["sections"].find()
+        res.send(post);
+      } catch (error) {
+        res.status(500);
+      }
+}
+
 const addData = async (req, res) => {
     try {
         const post = new routes[req.params.id](req.body)
@@ -38,7 +47,7 @@ const deleteData = async (req, res) => {
 	}
 }
 
-module.exports = { addData, listData, patchData, deleteData }
+module.exports = { listData, listSections, addData, patchData, deleteData }
 
 // exports.addData = addData;
 // exports.listData = listData;

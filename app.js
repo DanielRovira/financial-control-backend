@@ -8,6 +8,7 @@ const userRoutes = require("./routes/user-routes");
 const financialControl = require("./routes/financial-control-routes");
 
 const router = express.Router()
+app.use(cors());
 router.get("/", (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*")
     res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -16,9 +17,13 @@ router.get("/", (req, res) => {
     res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
      });
 
+ app.all('*', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
+});
 
 
-app.use(cors());
+
 // app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(cookieParser());
 app.use(express.json());

@@ -8,7 +8,7 @@ const userRoutes = require("./routes/user-routes");
 const financialControl = require("./routes/financial-control-routes");
 
 app.use(cors());
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+// app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api", userRoutes);
@@ -27,7 +27,7 @@ mongoose
 
 	.then(() => {
 		// app.listen(process.env.PORT, "127.0.0.1", () => {
-		app.listen(process.env.PORT, () => {
+		app.listen(process.env.PORT, "0.0.0.0", () => {
 			console.log(`Server has started on port ${process.env.PORT}`)
 		})})
         

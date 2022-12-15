@@ -23,7 +23,7 @@ const financialControl = require("./routes/financial-control-routes");
 // });
 
 
-app.use(cors({ credentials: true, origin: ["http://localhost:3000", "https://danielrovira.github.io" ] }))
+app.use(cors({ credentials: true, origin: "https://danielrovira.github.io" }))
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api", userRoutes);

@@ -1,17 +1,13 @@
 {
-    "sections":
+    "corsWhiteList":
             [    
                 {
-                    "title": "SES-SJM"
+                    "title": "Localhost",
+                    "adress": "http://localhost:3000"
                 },
                 {
-                    "title": "PARNAMIRIM"
-                },
-                {
-                    "title": "BREJO"
-                },
-                {
-                    "title": "CAICO"
+                    "title": "GitHub Pages",
+                    "adress": "https://danielrovira.github.io/financial-control-worksheet/"
                 }
             ]
 }

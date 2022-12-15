@@ -40,7 +40,7 @@ const financialControl = require("./routes/financial-control-routes");
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors({ credentials: true, origin: process.env.CORS1 }))
+app.use(cors({ credentials: true, origin: process.env.CORS }))
 app.use("/api", userRoutes);
 app.use("/api/financial-control", financialControl);
 

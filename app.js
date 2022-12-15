@@ -7,23 +7,23 @@ const app = express();
 const userRoutes = require("./routes/user-routes");
 const financialControl = require("./routes/financial-control-routes");
 
-// const router = express.Router()
-// app.use(cors());
-// router.get("/", (req, res) => {
-//     res.setHeader("Access-Control-Allow-Origin", "*")
-//     res.setHeader("Access-Control-Allow-Credentials", "true");
-//     res.setHeader("Access-Control-Max-Age", "1800");
-//     res.setHeader("Access-Control-Allow-Headers", "content-type");
-//     res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
-//      });
+const router = express.Router()
+app.use(cors());
+router.get("/", (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "https://danielrovira.github.io")
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Max-Age", "1800");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+     });
 
-//  app.all('*', (req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     next();
-// });
+ app.all('*', (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://danielrovira.github.io");
+    next();
+});
 
 
-app.use(cors({ credentials: true, origin: "https://danielrovira.github.io" }))
+// app.use(cors({ credentials: true, origin: "https://danielrovira.github.io" }))
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api", userRoutes);

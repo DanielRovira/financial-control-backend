@@ -55,12 +55,14 @@ const login = async (req, res, next) => {
     req.cookies[`${existingUser._id}`] = "";
   }
 
-  res.cookie(String(existingUser._id), token, {
-    path: "/",
-    expires: new Date(Date.now() + 1000 * 3000), // 3000 seconds
-    httpOnly: true,
-    sameSite: "lax",
-  });
+  res.cookie(String(existingUser._id), token
+//   , {
+//     path: "/",
+//     expires: new Date(Date.now() + 1000 * 3000), // 3000 seconds
+//     httpOnly: true,
+//     sameSite: "lax",
+//   }
+  );
 
   return res
     .status(200)

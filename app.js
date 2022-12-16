@@ -7,37 +7,6 @@ const app = express();
 const userRoutes = require("./routes/user-routes");
 const financialControl = require("./routes/financial-control-routes");
 
-// const router = express.Router()
-// app.use(cors());
-// router.get("/", (req, res) => {
-//     res.setHeader("Access-Control-Allow-Origin", "*")
-//     res.setHeader("Access-Control-Allow-Credentials", "true");
-//     res.setHeader("Access-Control-Max-Age", "1800");
-//     res.setHeader("Access-Control-Allow-Headers", "content-type");
-//     res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
-//      });
-
-//  app.all('*', (req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     next();
-// });
-
-
-// const allowedOrigins = ['https://danielrovira.github.io',
-//                       'http://localhost:3000'];
-// app.use(cors({
-//   origin: function(origin, callback){
-//     if(!origin) return callback(null, true);
-//     if(allowedOrigins.indexOf(origin) === -1){
-//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   }, credentials: true
-
-// }));
-
-
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors({ credentials: true, origin: process.env.CORS }))
@@ -52,7 +21,7 @@ const connectionOptions = {
 mongoose
   .connect(
     // `mongodb://myUserAdmin:${process.env.DB_PASS}@${process.env.DB_PATH}/?authMechanism=DEFAULT`, connectionOptions
-    `mongodb+srv://admin:${process.env.MONGODB_PASSWORORD}@cluster0.ifkxjyh.mongodb.net/?retryWrites=true&w=majority`, connectionOptions
+    `mongodb+srv://admin:${process.env.DB_PASS}@cluster0.ifkxjyh.mongodb.net/?retryWrites=true&w=majority`, connectionOptions
   )
 
 	.then(() => {

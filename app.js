@@ -25,7 +25,6 @@ mongoose
   )
 
 	.then(() => {
-		// app.listen(process.env.PORT, () => {
 		app.listen(process.env.PORT, () => {
 			console.log(`Server has started on port ${process.env.PORT}`)
 		})})

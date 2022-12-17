@@ -33,6 +33,15 @@ const listSections = async (req, res) => {
     }
 }
 
+const listCategories = async (req, res) => {
+    try {
+        const post = await mongoose.model("Categories", sectionslSchema, "categories").find()
+        res.send({post, status: true});
+    } catch (error) {
+        res.status(500);
+    }
+}
+
 const addData = async (req, res) => {
     try {
         const post = new mongoose.model(req.params.id, financialSchema, req.params.id)(req.body)
@@ -62,7 +71,7 @@ const deleteData = async (req, res) => {
 	}
 }
 
-module.exports = { listData, listSections, addData, patchData, deleteData }
+module.exports = { listData, listSections, listCategories, addData, patchData, deleteData }
 
 // exports.addData = addData;
 // exports.listData = listData;

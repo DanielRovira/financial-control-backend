@@ -56,12 +56,12 @@ const login = async (req, res, next) => {
   }
 
   res.cookie(String(existingUser._id), token
-//   , {
-//     path: "/",
-//     expires: new Date(Date.now() + 1000 * 3000), // 3000 seconds
-//     httpOnly: true,
-//     sameSite: "lax",
-//   }
+  , {
+    path: "/",
+    expires: new Date(Date.now() + 1000 * 5), // 5 seconds
+    httpOnly: true,
+    sameSite: "lax",
+  }
   );
 
   return res
@@ -71,7 +71,8 @@ const login = async (req, res, next) => {
 
 const verifyToken = (req, res, next) => {
   const cookies = req.headers.cookie;
-  const token = cookies.split("=")[1];
+  if (cookies) {
+  const token = cookies?.split("=")[1];
   if (!token) {
     res.status(404).json({ message: "No token found" });
   }
@@ -81,7 +82,8 @@ const verifyToken = (req, res, next) => {
     }
     console.log(user.id);
     req.id = user.id;
-  });
+  })}
+  else {res.status(404).json({ message: "No token found" });}
   next();
 };
 
@@ -101,6 +103,7 @@ const getUser = async (req, res, next) => {
 
 const refreshToken = (req, res, next) => {
   const cookies = req.headers.cookie;
+  if (cookies) {
   const prevToken = cookies.split("=")[1];
   if (!prevToken) {
     return res.status(400).json({ message: "Couldn't find token" });
@@ -120,18 +123,20 @@ const refreshToken = (req, res, next) => {
 
     res.cookie(String(user.id), token, {
       path: "/",
-      expires: new Date(Date.now() + 1000 * 3000), // 3000 seconds
+      expires: new Date(Date.now() + 1000 * 5), // 5 seconds
       httpOnly: true,
       sameSite: "lax",
     });
 
     req.id = user.id;
+    })}
+    else {return res.status(400).json({ message: "Couldn't find token" })}
     next();
-  });
 };
 
 const logout = (req, res, next) => {
   const cookies = req.headers.cookie;
+  if (cookies) {
   const prevToken = cookies.split("=")[1];
   if (!prevToken) {
     return res.status(400).json({ message: "Couldn't find token" });
@@ -145,6 +150,8 @@ const logout = (req, res, next) => {
     req.cookies[`${user.id}`] = "";
     return res.status(200).json({ message: "Successfully Logged Out" });
   });
+}
+else {return res.status(400).json({ message: "Couldn't find token" });}
 };
 
 exports.logout = logout;

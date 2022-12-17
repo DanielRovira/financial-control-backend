@@ -18,7 +18,7 @@ const sectionslSchema = new Schema({
 const listData = async (req, res) => {
     try {
         const post = await mongoose.model(req.params.id, financialSchema, req.params.id).find()
-        res.send({post, status: true});
+        res.send(post);
     } catch (error) {
         res.status(500);
     }
@@ -27,7 +27,7 @@ const listData = async (req, res) => {
 const listSections = async (req, res) => {
     try {
         const post = await mongoose.model("Sections", sectionslSchema, "sections").find()
-        res.send({post, status: true});
+        res.send(post);
     } catch (error) {
         res.status(500);
     }
@@ -36,7 +36,7 @@ const listSections = async (req, res) => {
 const listCategories = async (req, res) => {
     try {
         const post = await mongoose.model("Categories", sectionslSchema, "categories").find()
-        res.send({post, status: true});
+        res.send(post);
     } catch (error) {
         res.status(500);
     }

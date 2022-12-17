@@ -82,9 +82,10 @@ const verifyToken = (req, res, next) => {
     }
     console.log(user.id);
     req.id = user.id;
+    next();
   })}
-  else {res.status(404).json({ message: "No token found" });}
-  next();
+  else {return res.status(400).json({ message: "Couldn't find token"})}
+  
 };
 
 const getUser = async (req, res, next) => {
@@ -96,9 +97,9 @@ const getUser = async (req, res, next) => {
     return new Error(err);
   }
   if (!user) {
-    return res.status(404).json({ messsage: "User Not FOund" });
+    return res.status(404).json({ messsage: "User Not Found" });
   }
-  return res.status(200).json({ user });
+  return res.status(200).json({ user, status: true });
 };
 
 const refreshToken = (req, res, next) => {
@@ -129,9 +130,9 @@ const refreshToken = (req, res, next) => {
     });
 
     req.id = user.id;
+    next();
     })}
     else {return res.status(400).json({ message: "Couldn't find token" })}
-    next();
 };
 
 const logout = (req, res, next) => {

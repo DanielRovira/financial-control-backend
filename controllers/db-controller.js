@@ -19,18 +19,18 @@ const listData = async (req, res) => {
     try {
         const post = await mongoose.model(req.params.id, financialSchema, req.params.id).find()
         res.send({post, status: true});
-      } catch (error) {
+    } catch (error) {
         res.status(500);
-      }
+    }
 }
 
 const listSections = async (req, res) => {
     try {
         const post = await mongoose.model("Sections", sectionslSchema, "sections").find()
         res.send({post, status: true});
-      } catch (error) {
+    } catch (error) {
         res.status(500);
-      }
+    }
 }
 
 const addData = async (req, res) => {
@@ -38,9 +38,9 @@ const addData = async (req, res) => {
         const post = new mongoose.model(req.params.id, financialSchema, req.params.id)(req.body)
         await post.save();
         res.send(post);
-      } catch (error) {
+    } catch (error) {
         res.status(500);
-      }
+    }
 }
 
 const patchData = async (req, res) => {
@@ -48,7 +48,7 @@ const patchData = async (req, res) => {
         const post = await mongoose.model(req.params.id, financialSchema, req.params.id).findByIdAndUpdate(req.body._id , req.body)
         await post.save();
         res.send(req.body);
-      } catch {
+    } catch {
 		res.status(404)
 	}
 }
@@ -57,7 +57,7 @@ const deleteData = async (req, res) => {
     try {
         await mongoose.model(req.params.id, financialSchema, req.params.id).findByIdAndRemove(req.body._id)
         res.status(204).send()
-      } catch {
+    } catch {
 		res.status(404)
 	}
 }

@@ -40,11 +40,11 @@ const login = async (req, res, next) => {
         return new Error(err);
     }
     if (!existingUser) {
-        return res.status(400).json({ message: "User not found. Signup Please" });
+        return res.status(400).json({ message: "User not found. Signup Please", status: 400 });
     }
     const isPasswordCorrect = bcrypt.compareSync(password, existingUser.password);
     if (!isPasswordCorrect) {
-        return res.status(400).json({ message: "Inavlid Email / Password" });
+        return res.status(400).json({ message: "Inavlid Email / Password", status: 400 });
     }
     const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET_KEY, {
         expiresIn: `${process.env.EXP_TIME}s`,
@@ -67,7 +67,7 @@ const login = async (req, res, next) => {
   
     return res
         .status(200)
-        .json({ message: "Successfully Logged In", user: existingUser, token });
+        .json({ message: "Successfully Logged In", user: existingUser, token, status: 200 });
 };
 
 const verifyToken = (req, res, next) => {

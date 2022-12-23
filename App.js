@@ -21,7 +21,8 @@ const connectionOptions = {
 mongoose
     .connect(
         // `mongodb://myUserAdmin:${process.env.DB_PASS}@${process.env.DB_PATH}/?authMechanism=DEFAULT`, connectionOptions
-        `mongodb+srv://admin:${process.env.DB_PASS}@cluster0.ifkxjyh.mongodb.net/?retryWrites=true&w=majority`, connectionOptions
+        // `mongodb+srv://admin:${process.env.DB_PASS}@cluster0.ifkxjyh.mongodb.net/?retryWrites=true&w=majority`, connectionOptions
+        `${process.env.DB_URL}`, connectionOptions
     )
     .then(() => {
     	app.listen(process.env.PORT, () => {

@@ -61,7 +61,9 @@ const login = async (req, res, next) => {
         path: "/",
         expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
         httpOnly: true,
-        sameSite: "lax",
+        sameSite: 'none',
+        secure: true,
+        domain: process.env.CORS,
     }
     );
   
@@ -127,7 +129,9 @@ const refreshToken = (req, res, next) => {
                 path: "/",
                 expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
                 httpOnly: true,
-                sameSite: "lax",
+                sameSite: 'none',
+                secure: true,
+                domain: process.env.CORS,
             });
 
             req.id = user.id;

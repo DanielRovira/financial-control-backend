@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 const financialSchema = new Schema({
 	date: String,
+	number: Number,
+	link: String,
+	bank: String,
+	idnumber: String,
+	receiver: String,
 	desc: String,
     amount: Number,
     expense: Boolean,

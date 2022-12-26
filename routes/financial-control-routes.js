@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { listData, listSections, listCategories, addData, patchData, deleteData } = require('../controllers/db-controller');
-const { verifyToken, getUser } = require('../controllers/user-controller');
+const { verifyToken } = require('../controllers/user-controller');
 const { ObjectId } = require('mongodb')
 
 const checkBody = (req,res,next) => {

@@ -9,6 +9,7 @@ const financialControl = require("./routes/financial-control-routes");
 
 app.use(cookieParser());
 app.use(express.json());
+app.set("trust proxy", true)
 app.use(cors({ credentials: true, origin: process.env.CORS }))
 app.use("/api", userRoutes);
 app.use("/api/financial-control", financialControl);

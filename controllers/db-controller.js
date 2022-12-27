@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 const financialSchema = new Schema({
 	date: String,
-	number: Number,
 	link: String,
 	bank: String,
 	idnumber: String,

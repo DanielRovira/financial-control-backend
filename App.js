@@ -13,7 +13,7 @@ app.set("trust proxy", true)
 app.use(cors({ credentials: true, origin: process.env.CORS }))
 app.use("/api", userRoutes);
 app.use("/api/financial-control", financialControl);
-
+mongoose.set("strictQuery", false);     // Will be the default after Mongoose 7. Remove after that
 const connectionOptions = {
     dbName: process.env.DB,
     useUnifiedTopology: true

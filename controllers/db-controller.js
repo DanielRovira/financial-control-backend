@@ -23,7 +23,7 @@ const sectionslSchema = new Schema({
 const listData = async (req, res) => {
     try {
         const post = await mongoose.model(req.params.id, financialSchema, req.params.id).find()
-        res.send(post);
+        res.send({post, status: 200});
     } catch (error) {
         res.status(500);
     }

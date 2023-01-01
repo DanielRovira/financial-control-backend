@@ -75,17 +75,17 @@ const verifyToken = (req, res, next) => {
     if (cookies) {
     const token = cookies?.split("=")[1];
     if (!token) {
-        res.status(404).json({ message: "No token found" });
+        res.status(404).json({ message: "No token found", status: 404 });
     }
     jwt.verify(String(token), process.env.JWT_SECRET_KEY, (err, user) => {
         if (err) {
-            return res.status(400).json({ message: "Invalid TOken" });
+            return res.status(400).json({ message: "Invalid Token", status: 400 });
         }
         console.log(user.id);
         req.id = user.id;
         next();
     })}
-    else {return res.status(400).json({ message: "Couldn't find token"})}
+    else {return res.status(400).json({ message: "Couldn't find token", status: 400 })}
 };
 
 const getUser = async (req, res, next) => {

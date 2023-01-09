@@ -11,7 +11,7 @@ const financialSchema = new Schema({
 	link: String,
 	bank: String,
 	idnumber: String,
-    forn: String,
+    provider: String,
 	desc: String,
     amount: Number
 })

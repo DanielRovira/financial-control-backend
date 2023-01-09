@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const financialSchema = new Schema({
 	date: String,
     expense: Boolean,
-    prov: String,
+    source: String,
     category: String,
     subCategory: String,
 	link: String,

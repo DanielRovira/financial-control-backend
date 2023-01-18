@@ -12,7 +12,7 @@ app.use(express.json());
 app.set("trust proxy", true)
 app.use(cors({ credentials: true, origin: process.env.CORS }))
 app.use("/api", userRoutes);
-app.use(`/api/${process.env.DB_URL}`, DB);
+app.use(`/api/${process.env.DB}`, DB);
 mongoose.set("strictQuery", false);     // Will be the default after Mongoose 7. Remove after that
 const connectionOptions = {
     dbName: process.env.DB,

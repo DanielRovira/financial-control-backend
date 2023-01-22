@@ -13,11 +13,17 @@ const financialSchema = new Schema({
 	idnumber: String,
     provider: String,
 	desc: String,
-    amount: Number
+    amount: Number,
+
+    name: String,
+    title: String,
+    type: String,
 })
 
 const sectionslSchema = new Schema({
-    date: String
+    name: String,
+    title: String,
+    type: String,
 })
 
 const listData = async (req, res) => {

@@ -18,7 +18,11 @@ const financialSchema = new Schema({
     name: String,
     title: String,
     type: String,
-})
+},
+{
+    versionKey: false // You should be aware of the outcome after set to false
+}
+)
 
 const sectionslSchema = new Schema({
     name: String,

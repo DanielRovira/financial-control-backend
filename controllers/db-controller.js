@@ -14,6 +14,7 @@ const financialSchema = new Schema({
     provider: String,
 	desc: String,
     amount: Number,
+    costCenter: String,
 
     name: String,
     title: String,

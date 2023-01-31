@@ -51,7 +51,7 @@ const login = async (req, res, next) => {
         expiresIn: `${process.env.EXP_TIME}s`,
     });
   
-    console.log("Login sucessfull\n", `User: ${existingUser.name}\n`, datetime);
+    // console.log("Login sucessfull\n", `User: ${existingUser.name}\n`, datetime);
   
     // if (req.cookies[`${existingUser._id}`]) {
     //     req.cookies[`${existingUser._id}`] = "";
@@ -86,7 +86,7 @@ const verifyToken = (req, res, next) => {
         if (err) {
             return res.status(400).json({ message: "Invalid Token", status: 400 });
         }
-        console.log(`Requisition by user: ${user.name}\n`, datetime);
+        // console.log(`Requisition by user: ${user.name}\n`, datetime);
         req.id = user.id;
         next();
     })}
@@ -128,7 +128,7 @@ const refreshToken = (req, res, next) => {
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
                 expiresIn: "3005s",
             });
-            console.log("Regenerated Token\n", `User: ${user.name}\n`, datetime);
+            // console.log("Regenerated Token\n", `User: ${user.name}\n`, datetime);
 
             // res.cookie(String(user.id), token, {
             res.cookie("token", token, {
@@ -162,7 +162,7 @@ const logout = (req, res, next) => {
             // req.cookies[`${user.id}`] = "";
             res.clearCookie("token");
             req.cookies["token"] = "";
-            console.log("Logout sucessfull\n", `User: ${user.name}\n`, datetime);
+            // console.log("Logout sucessfull\n", `User: ${user.name}\n`, datetime);
             return res.status(200).json({ message: "Successfully Logged Out" });
         });
     }

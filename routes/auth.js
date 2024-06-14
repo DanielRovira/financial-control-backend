@@ -15,7 +15,7 @@ passport.use(new GoogleStrategy({
   clientID: process.env['GOOGLE_CLIENT_ID'],
   clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
   callbackURL: '/api/oauth/oauth2/redirect/google',
-  scope: [ 'profile' ],
+  scope: [ 'profile' , 'email' ],
   state: true
 },
 function(accessToken, refreshToken, profile, cb) {
@@ -38,7 +38,8 @@ function(accessToken, refreshToken, profile, cb) {
           if (err) { return cb(err); }
           var user = {
             id: id,
-            name: profile.displayName
+            name: profile.displayName,
+            username: profile.emails[0].value
           };
           return cb(null, user);
         });

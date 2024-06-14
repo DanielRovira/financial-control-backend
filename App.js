@@ -5,18 +5,19 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const passport = require('passport');
 const session = require('express-session');
-// var csrf = require('csurf');
-var logger = require('morgan');
-var SQLiteStore = require('connect-sqlite3')(session);
+// const csrf = require('csurf');
+// const logger = require('morgan');
+const SQLiteStore = require('connect-sqlite3')(session);
 const app = express();
 
 const authRouter = require('./routes/auth');
 const userRoutes = require("./routes/user-routes");
 const DB = require("./routes/financial-control-routes");
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true)
 app.use(cors({ credentials: true, origin: process.env.CORS }))
 app.use(session({
@@ -27,6 +28,17 @@ app.use(session({
   }));
 // app.use(csrf());
 app.use(passport.authenticate('session'));
+// app.use(function(req, res, next) {
+//     var msgs = req.session.messages || [];
+//     res.locals.messages = msgs;
+//     res.locals.hasMessages = !! msgs.length;
+//     req.session.messages = [];
+//     next();
+//   });
+// app.use(function(req, res, next) {
+//   res.locals.csrfToken = req.csrfToken();
+//   next();
+// });
 
 app.use('/api/oauth', authRouter);
 app.use("/api", userRoutes);

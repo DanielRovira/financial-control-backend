@@ -95,15 +95,26 @@ const verifyToken = (req, res, next) => {
 
 const getUser = async (req, res, next) => {
     const userId = req.id;
+    console.log(req.user)
+    console.log(req.user.username)
     let user;
     try {
         user = await User.findById(userId, "-password");
     } catch (err) {
         return new Error(err);
     }
-    if (!user) {
+    try {
+        existingUser = await User.findOne({ email: req.user.username });
+    } catch (err) {
+        return new Error(err);
+    }
+    if (!user && existingUser) {
+        user = existingUser
+    }
+    if (!user && !existingUser) {
         return res.status(404).json({ messsage: "User Not Found" });
     }
+
     return res.status(200).json({ user });
 };
 

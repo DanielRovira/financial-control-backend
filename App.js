@@ -7,7 +7,7 @@ const passport = require('passport');
 const session = require('express-session');
 // const csrf = require('csurf');
 // const logger = require('morgan');
-const SQLiteStore = require('connect-sqlite3')(session);
+// const SQLiteStore = require('connect-sqlite3')(session);
 const app = express();
 
 const authRouter = require('./routes/auth');
@@ -24,7 +24,7 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
-    store: new SQLiteStore({ db: 'sessions.db', dir: 'var/db' })
+    // store: new SQLiteStore({ db: 'sessions.db', dir: 'var/db' })
   }));
 // app.use(csrf());
 app.use(passport.authenticate('session'));

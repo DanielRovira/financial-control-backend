@@ -94,24 +94,14 @@ const verifyToken = (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-    const userId = req.id;
-    console.log(req.user)
-    console.log(req.user.username)
+    const userId = req.id ||  req.user.id;
     let user;
     try {
         user = await User.findById(userId, "-password");
     } catch (err) {
         return new Error(err);
     }
-    try {
-        existingUser = await User.findOne({ email: req.user.username });
-    } catch (err) {
-        return new Error(err);
-    }
-    if (!user && existingUser) {
-        user = existingUser
-    }
-    if (!user && !existingUser) {
+    if (!user) {
         return res.status(404).json({ messsage: "User Not Found" });
     }
 
@@ -172,7 +162,9 @@ const logout = (req, res, next) => {
             // res.clearCookie(`${user.id}`);
             // req.cookies[`${user.id}`] = "";
             res.clearCookie("token");
+            res.clearCookie("connect.sid");
             req.cookies["token"] = "";
+            req.cookies["connect.sid"] = "";
             // console.log("Logout sucessfull\n", `User: ${user.name}\n`, datetime);
             return res.status(200).json({ message: "Successfully Logged Out" });
         });

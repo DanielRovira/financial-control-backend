@@ -72,7 +72,7 @@ const login = async (req, res, next) => {
   
     return res
         .status(200)
-        .json({ message: "Successfully Logged In", user: existingUser, token, status: 200 });
+        .json({ message: "Successfully Logged In", user: {name: existingUser.name, email: existingUser.email}, token, status: 200 });
 };
 
 const verifyToken = (req, res, next) => {

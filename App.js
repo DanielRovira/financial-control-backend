@@ -31,7 +31,7 @@ app.use(session({
             collection: 'LoginSessions',
     })
   }));
-
+app.use(passport.initialize()) 
 app.use(passport.authenticate('session'));
 
 app.use('/api/oauth', authRouter);

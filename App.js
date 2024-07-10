@@ -8,7 +8,6 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const logger = require('morgan');
 
-// const SQLiteStore = require('connect-sqlite3')(session);
 const app = express();
 
 const authRouter = require('./routes/auth');

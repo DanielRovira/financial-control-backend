@@ -165,6 +165,7 @@ const logout = (req, res, next) => {
             res.clearCookie("connect.sid");
             req.cookies["token"] = "";
             req.cookies["connect.sid"] = "";
+            req.session.destroy()
             // console.log("Logout sucessfull\n", `User: ${user.name}\n`, datetime);
             return res.status(200).json({ message: "Successfully Logged Out" });
         });

@@ -5,7 +5,9 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const passport = require('passport');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const logger = require('morgan');
+
 // const SQLiteStore = require('connect-sqlite3')(session);
 const app = express();
 
@@ -23,7 +25,11 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
-    // store: new SQLiteStore({ db: 'sessions.db', dir: 'var/db' })
+    store: new MongoDBStore({
+            uri: process.env.DB_URL,
+            databaseName: process.env.DB,
+            collection: 'LoginSessions',
+    })
   }));
 
 app.use(passport.authenticate('session'));

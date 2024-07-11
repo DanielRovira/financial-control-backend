@@ -73,7 +73,7 @@ router.get('/login/federated/google', passport.authenticate('google'));
     user returns, they are signed in to their linked account.
 */
 router.get('/oauth2/redirect/google', passport.authenticate('google', {
-  successReturnToOrRedirect: process.env.CORS,
+  successReturnToOrRedirect: '/api/oauthLogin',
   failureRedirect: process.env.CORS
 }));
 

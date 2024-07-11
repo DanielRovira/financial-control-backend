@@ -6,6 +6,15 @@ const { oauthLogin } = require('../controllers/auth-controller');
 
 var ensureLoggedIn = ensureLogIn();
 
+// function callback(req, res, next) {return res.redirect(process.env.CORS)}
+const authenticated = (req,res,next)=>{
+    const customError = new Error('you are not logged in');
+    customError.statusCode = 401;
+    (!req.user) ? next(customError) : next()
+}
+router.get('/getUser',authenticated, (req, res)=> res.json({ user: {name: req.user.name, email: req.user.email}, status: 200 }))
+
+
 router.post('/signup', signup);
 router.post('/login', login);
 // router.get('/user', verifyToken, getUser);

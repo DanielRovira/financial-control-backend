@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true)
 app.use(cors({ credentials: true, origin: [process.env.CORS, 'https://accounts.google.com'] }))
 app.use(session({
-    secret: 'keyboard cat',
+    secret: process.env.JWT_SECRET_KEY,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     store: new MongoDBStore({

@@ -33,7 +33,7 @@ const oauthLogin = async (req, res, next) => {
 
         return res
         .status(200)
-        .json({ message: "Successfully Logged In", user: user, token, status: 200 });
+        .json({ message: "Successfully Logged In", user: {name: user.name, email: user.email}, token, status: 200 });
 };
 
 exports.oauthLogin = oauthLogin;

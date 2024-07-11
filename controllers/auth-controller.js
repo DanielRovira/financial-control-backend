@@ -3,7 +3,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const oauthLogin = async (req, res, next) => {
-    const userId = req.id || req.user.id;
+    console.log(req.user)
+    console.log(req.session.passport.user)
+    const userId = req.user.id;
     let user;
     try {
         user = await User.findById(userId, "-password");

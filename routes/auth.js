@@ -27,7 +27,7 @@ function(accessToken, refreshToken, profile, cb) {
 // and deserialized.
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {
-    cb(null, { id: user.id, username: user.username, name: user.name });
+    cb(null, { id: user.id, email: user.email, name: user.name });
   });
 });
 

@@ -19,7 +19,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true)
-app.use(cors({ credentials: true, origin: process.env.CORS }))
+app.use(cors({ credentials: true, origin: [process.env.CORS, 'https://accounts.google.com'] }))
 app.use(session({
     secret: 'keyboard cat',
     resave: false, // don't save session if unmodified

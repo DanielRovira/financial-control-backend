@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const oauthLogin = async (req, res, next) => {
-    console.log(req)
     const userId = req.id || req.user.id;
     let user;
     try {

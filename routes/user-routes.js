@@ -8,6 +8,7 @@ var ensureLoggedIn = ensureLogIn();
 
 // function callback(req, res, next) {return res.redirect(process.env.CORS)}
 const authenticated = (req,res,next)=>{
+    console.log(req)
     const customError = new Error('you are not logged in');
     customError.statusCode = 401;
     (!req.user) ? next(customError) : next()

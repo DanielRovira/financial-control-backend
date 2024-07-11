@@ -13,7 +13,7 @@ const authenticated = (req,res,next)=>{
     customError.statusCode = 401;
     (!req.user) ? next(customError) : next()
 }
-router.get('/getUser',authenticated, (req, res)=> res.json({ user: {name: req.user.name, email: req.user.email}, status: 200 }))
+// router.get('/getUser',authenticated, (req, res)=> res.json({ user: {name: req.user.name, email: req.user.email}, status: 200 }))
 // router.post('/findsession', findSession);
 
 

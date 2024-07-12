@@ -14,6 +14,16 @@ const authRouter = require('./routes/auth');
 const userRoutes = require("./routes/user-routes");
 const DB = require("./routes/financial-control-routes");
 
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+    );
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next(); // dont forget this
+  });
+
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.json());

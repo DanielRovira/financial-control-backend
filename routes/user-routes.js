@@ -17,7 +17,7 @@ const authenticated = (req, res, next)=>{
 
 router.post('/signup', signup);
 router.post('/login', login);
-router.get('/getUser', verifyToken, refreshToken, getUser);
+router.get('/getUser', verifyToken, refreshToken, getUser, refreshToken);
 router.get('/refreshtoken', verifyToken, refreshToken, getUser);
 router.get('/oauthLogin', authenticated, oauthLogin);
 // router.get('/oauthLogin', (req,res,next) => console.log(req));

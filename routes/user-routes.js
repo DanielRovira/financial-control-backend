@@ -7,12 +7,17 @@ const { oauthLogin, findSession } = require('../controllers/auth-controller');
 var ensureLoggedIn = ensureLogIn();
 
 // function callback(req, res, next) {return res.redirect(process.env.CORS)}
-const authenticated = (req,res,next)=>{
-    console.log(req)
-    const customError = new Error('you are not logged in');
-    customError.statusCode = 401;
-    (!req.user) ? next(customError) : next()
+const authenticated = (req, res, next)=>{
+    console.log(req.user)
+    // const customError = new Error('you are not logged in');
+    // customError.statusCode = 401;
+    // (!req.user) ? next(customError) : next()
+    if (req.user) {
+        next()
+    }
+    else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
 }
+
 router.get('/getUser',authenticated, (req, res)=> res.json({ user: {name: req.user.name, email: req.user.email}, status: 200 }))
 // router.post('/findsession', findSession);
 

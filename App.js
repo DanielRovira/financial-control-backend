@@ -29,7 +29,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true)
-app.use(cors({ credentials: true, origin: [process.env.CORS, 'https://accounts.google.com'] }))
+app.use(cors({
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  origin: [process.env.CORS, /\.google\.com$/] 
+}))
 app.use(session({
     secret: process.env.JWT_SECRET_KEY,
     resave: false, // don't save session if unmodified

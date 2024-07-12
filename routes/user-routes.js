@@ -30,7 +30,7 @@ const authenticated = (req, res, next)=>{
 router.post('/signup', signup);
 router.post('/login', login);
 router.get('/getUser', verifyToken, getUser);
-router.get('/refreshtoken', refreshToken, verifyToken, getUser);
+router.get('/refreshtoken', verifyToken, refreshToken, getUser);
 router.get('/oauthLogin', authenticated, oauthLogin);
 // router.get('/oauthLogin', (req,res,next) => console.log(req));
 router.post('/logout', verifyToken, logout);

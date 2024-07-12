@@ -26,7 +26,7 @@ const findSession = async (req, res, next) => {
 
 
 const oauthLogin = async (req, res, next) => {
-    // console.log(req.user)
+    console.log(req.user)
     // console.log(req.session.passport.user)
     const userId = req.user.id;
     let user;

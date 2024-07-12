@@ -76,9 +76,9 @@ const login = async (req, res, next) => {
 };
 
 const verifyToken = (req, res, next) => {
-    console.log(req.cookies.token)
-    console.log(req.cookies.token)
     console.log(req)
+    console.log(req.cookies)
+    console.log(req.headers)
 
     // const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];
     if (req.cookies["token"]) {

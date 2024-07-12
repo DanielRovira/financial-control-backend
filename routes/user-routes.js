@@ -18,7 +18,12 @@ const authenticated = (req, res, next)=>{
     else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
 }
 
-router.get('/getUser', authenticated, (req, res)=> res.json({ user: {name: req.user.name, email: req.user.email}, status: 200 }))
+// router.get('/getUser', authenticated, (req, res) => {
+//     console.log("getUser:")
+//     console.log(req.user)
+//     // res.session.context = { user: {name: req.user.name, email: req.user.email}, status: 200 }
+//     // res.redirect(`${process.env.CORS}`)
+// })
 // router.post('/findsession', findSession);
 
 
@@ -26,7 +31,7 @@ router.post('/signup', signup);
 router.post('/login', login);
 // router.get('/user', verifyToken, getUser);
 router.get('/refreshtoken', refreshToken, verifyToken, getUser);
-router.get('/oauthLogin', authenticated, oauthLogin);
+router.get('/getUser', authenticated, oauthLogin);
 // router.get('/oauthLogin', (req,res,next) => console.log(req));
 router.post('/logout', verifyToken, logout);
 

@@ -56,7 +56,8 @@ const oauthLogin = async (req, res, next) => {
         }
         );
         
-        return res.redirect(`${process.env.CORS}/api/getUser`)
+        // return res.redirect(`${process.env.CORS}/api/getUser`)
+        return res.redirect(`${process.env.CORS}`)
         // return res
         // .status(200)
         // .json({ message: "Successfully Logged In", user: {name: user.name, email: user.email}, token, status: 200 });

@@ -18,7 +18,7 @@ const authenticated = (req, res, next)=>{
     else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
 }
 
-router.get('/getUser',authenticated, (req, res)=> res.json({ user: {name: req.user.name, email: req.user.email}, status: 200 }))
+router.get('/getUser', authenticated, (req, res)=> res.json({ user: {name: req.user.name, email: req.user.email}, status: 200 }))
 // router.post('/findsession', findSession);
 
 

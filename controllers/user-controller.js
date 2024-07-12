@@ -65,7 +65,7 @@ const login = async (req, res, next) => {
     , {
         path: "/",
         expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
-        httpOnly: true,
+        // httpOnly: true,
         // secure: true,
         sameSite: "none",
     }
@@ -144,7 +144,7 @@ const refreshToken = (req, res, next) => {
             res.cookie("token", token, {
                 path: "/",
                 expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
-                httpOnly: true,
+                // httpOnly: true,
                 // secure: true,
                 sameSite: "none",
             });

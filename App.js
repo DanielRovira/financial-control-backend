@@ -43,7 +43,12 @@ app.use(session({
             uri: process.env.DB_URL,
             databaseName: process.env.DB,
             collection: 'LoginSessions',
-    })
+    }),
+    cookie: {
+      secure: true, // required for cookies to work on HTTPS
+      httpOnly: false,
+      sameSite: 'none'
+    }
   }));
 app.use(passport.initialize()) 
 app.use(passport.authenticate('session'));

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const ensureLogIn = require('connect-ensure-login').ensureLoggedIn;
 const { signup, login, verifyToken, getUser, refreshToken, logout } = require('../controllers/user-controller');
-const { oauthLogin, findSession } = require('../controllers/auth-controller');
+const { oauthLogin } = require('../controllers/auth-controller');
 
 var ensureLoggedIn = ensureLogIn();
 

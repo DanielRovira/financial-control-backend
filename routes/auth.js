@@ -72,12 +72,12 @@ router.get('/login/federated/google', passport.authenticate('google'));
     automatically created and their Google account is linked.  When an existing
     user returns, they are signed in to their linked account.
 */
-// router.get('/oauth2/redirect/google', passport.authenticate('google', {
-//   successReturnToOrRedirect: `https://financial-control-api-o937.onrender.com/api/oauthLogin`,
-//   failureRedirect: process.env.CORS
-// }));
-router.get('/oauth2/redirect/google', (req, res, next) => console.log(req)
-);
+router.get('/oauth2/redirect/google', passport.authenticate('google', {
+  successReturnToOrRedirect: `/api/oauthLogin`,
+  failureRedirect: process.env.CORS
+}));
+// router.get('/oauth2/redirect/google', (req, res, next) => console.log(req)
+// );
 
 /* POST /logout
  *

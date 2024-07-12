@@ -76,7 +76,7 @@ const login = async (req, res, next) => {
 };
 
 const verifyToken = (req, res, next) => {
-    console.log(req)
+    // console.log(req)
     console.log(req.cookies)
     console.log(req.headers)
 
@@ -143,7 +143,7 @@ const refreshToken = (req, res, next) => {
             res.cookie("token", token, {
                 path: "/",
                 expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
-                httpOnly: true,
+                // httpOnly: true,
                 sameSite: "lax",
             });
 

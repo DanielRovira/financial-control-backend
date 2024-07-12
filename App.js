@@ -31,7 +31,6 @@ app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true)
 app.use(cors({
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   origin: [process.env.CORS, /\.google\.com$/] 
 }))
 app.use(session({

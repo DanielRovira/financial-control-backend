@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true)
 app.use(cors({
   credentials: true,
-  origin: [process.env.CORS, /\.google\.com$/, www.googleapis.com] 
+  origin: [process.env.CORS, "/\.google\.com$/", "www.googleapis.com"] 
 }))
 app.use(session({
     secret: process.env.JWT_SECRET_KEY,

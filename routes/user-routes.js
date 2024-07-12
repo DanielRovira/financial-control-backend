@@ -7,6 +7,7 @@ const { oauthLogin, findSession } = require('../controllers/auth-controller');
 var ensureLoggedIn = ensureLogIn();
 
 const authenticated = (req, res, next)=>{
+    console.log("authenticated midware")
     console.log(req.user)
     if (req.user) {
         next()

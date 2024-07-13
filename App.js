@@ -15,11 +15,11 @@ const authRouter = require('./routes/auth');
 const userRoutes = require("./routes/user-routes");
 const DB = require("./routes/financial-control-routes");
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
-    next(); // dont forget this
-  });
-app.set("trust proxy", 1);
+// app.use((req, res, next) => {
+//     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
+//     next(); // dont forget this
+//   });
+// app.set("trust proxy", 1);
 // app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.json());
@@ -27,7 +27,8 @@ app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true)
 app.use(cors({
   credentials: true,
-  origin: [process.env.CORS, "/\.google\.com$/", "www.googleapis.com"] 
+  // origin: [process.env.CORS, "/\.google\.com$/", "www.googleapis.com"]
+  origin: [process.env.CORS]
 }))
 app.use(session({
     secret: process.env.JWT_SECRET_KEY,

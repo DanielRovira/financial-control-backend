@@ -17,8 +17,6 @@ const test = (req, res, next)=>{
     console.log("<<<<<<<<<<<< TEST >>>>>>>>>>>>")
     console.log("req.user:")
     console.log(req.user)
-    console.log("req.body.user:")
-    console.log(req.body.user)
     console.log("req.cookies:")
     console.log(req.cookies)
         next()
@@ -30,11 +28,11 @@ router.get('/refreshtoken', verifyToken, refreshToken, getUser);
 router.post('/logout', verifyToken, logout);
 
 // google redireciona de volta pra essa rota, que no final manda pro front
-router.get('/oauthLogin', test, authenticated, oauthLogin); //gera o cookie e redireciona pro front
+router.get('/oauthLogin', (req,res,next) => {console.log("oauthLogin:"); next()}, test, authenticated, oauthLogin); //gera o cookie e redireciona pro front
 
 // front executa essas duas rotas em sequencia, pq só o a rota getuser não deixa um cookie do front
-router.get('/getUser', test, verifyToken, getUser); //no front o parametro chega mas o cookie não funciona
-router.post('/tokenLogin', test, verifyToken, refreshToken, getUser); //entao o front pega o token que recebeu de getUser e posta um login, recebendo um novo token pro Domain do front
+router.get('/getUser', (req,res,next) => {console.log("getUser:"); next()}, test, verifyToken, getUser); //no front o parametro chega mas o cookie não funciona
+router.post('/tokenLogin', verifyToken, refreshToken, getUser); //entao o front pega o token que recebeu de getUser e posta um login, recebendo um novo token pro Domain do front
 
 module.exports = router;
 

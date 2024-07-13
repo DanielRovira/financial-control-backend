@@ -116,10 +116,11 @@ const getUser = async (req, res, next) => {
 };
 
 const refreshToken = (req, res, next) => {
+    const prevUserToken = req.token
     const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];
 
-    if (cookies) {
-        const prevToken = cookies.split("=")[1];
+    if (cookies || req.cookies["token"] || prevUserToken) {
+        const prevToken = cookies.split("=")[1] || req.cookies["token"] || prevUserToken;
         if (!prevToken) {
             return res.status(400).json({ message: "Couldn't find token" });
         }

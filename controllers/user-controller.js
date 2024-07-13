@@ -77,16 +77,11 @@ const login = async (req, res, next) => {
 };
 
 const verifyToken = (req, res, next) => {
-    // console.log(req)
-    console.log("verifyToken")
-    // console.log(req.headers)
-    // console.log(req.session)
-    console.log(req.user)
     prevUserToken = req.user?.token
     // const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];
     if (req.cookies["token"] || prevUserToken) {
         // const token = cookies?.split("=")[1]; 
-        const token = req.cookies["token"] || req.user.token;
+        const token = req.cookies["token"] || prevUserToken;
         if (!token) {
             res.status(404).json({ message: "No token found", status: 404 });
         }
@@ -96,7 +91,7 @@ const verifyToken = (req, res, next) => {
             }
             // console.log(`Requisition by user: ${user.name}\n`, datetime);
             req.id = user.id;
-            // req.token = token
+            req.token = token
             next();
         })}
     else {return res.status(405).json({ message: "Couldn't find token", status: 405 })}

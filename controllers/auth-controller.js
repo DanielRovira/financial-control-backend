@@ -4,9 +4,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const oauthLogin = async (req, res, next) => {
-    console.log("oauthLogin midware")
-    // console.log(req.user)
-    // console.log(req.session.passport.user)
     const userId = req.user.id;
     let user;
     try {
@@ -35,13 +32,9 @@ const oauthLogin = async (req, res, next) => {
             sameSite: "none",
         }
         );
-        // req.token = token
-        // next()
-        // return res.redirect(`${process.env.CORS}/api/getUser`)
+
         return res.redirect(`${process.env.CORS}`)
-        // return res
-        // .status(200)
-        // .json({ message: "Successfully Logged In", user: {name: user.name, email: user.email}, token, status: 200 });
+
 };
 
 exports.oauthLogin = oauthLogin;

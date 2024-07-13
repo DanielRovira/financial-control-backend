@@ -1,6 +1,4 @@
 const User = require('../models/User');
-const LoginSessions = require('../models/LoginSession');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const oauthLogin = async (req, res, next) => {
@@ -34,7 +32,6 @@ const oauthLogin = async (req, res, next) => {
         );
 
         return res.redirect(`${process.env.CORS}`)
-
 };
 
 exports.oauthLogin = oauthLogin;

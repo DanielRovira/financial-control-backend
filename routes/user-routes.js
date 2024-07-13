@@ -17,10 +17,10 @@ const authenticated = (req, res, next)=>{
 
 router.post('/signup', signup);
 router.post('/login', login);
-router.get('/getUser', verifyToken, refreshToken, getUser);
+router.get('/getUser', oauthLogin, verifyToken, refreshToken, getUser);
 // router.get('/refreshtoken', verifyToken, refreshToken, getUser);
 router.get('/refreshtoken', (req, res, next) => {return res.status(200)});
-router.get('/oauthLogin', authenticated, oauthLogin);
+// router.get('/oauthLogin', authenticated, oauthLogin);
 // router.get('/oauthLogin', (req,res,next) => console.log(req));
 router.post('/logout', verifyToken, logout);
 

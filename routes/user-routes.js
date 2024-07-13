@@ -14,7 +14,13 @@ const authenticated = (req, res, next)=>{
 }
 
 const test = (req, res, next)=>{
-    console.log(req.user) 
+    console.log("<<<<<<<<<<<< TEST >>>>>>>>>>>>")
+    console.log("req.user:")
+    console.log(req.user)
+    console.log("req.body.user:")
+    console.log(req.body.user)
+    console.log("req.cookies:")
+    console.log(req.cookies)
         next()
 }
 

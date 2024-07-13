@@ -30,9 +30,9 @@ const oauthLogin = async (req, res, next) => {
         , {
             path: "/",
             expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
-            // httpOnly: true,
+            httpOnly: true,
             // secure: true,
-            sameSite: "none",
+            sameSite: "lax",
         }
         );
         

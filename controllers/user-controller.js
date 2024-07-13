@@ -81,11 +81,11 @@ const verifyToken = (req, res, next) => {
     console.log("verifyToken")
     // console.log(req.headers)
     // console.log(req.session)
-    // console.log(req.user)
-
+    console.log(req.user)
+    prevUserToken = req.user?.token
     // const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];
-    if (req.cookies["token"] || req.user.token) {
-        // const token = cookies?.split("=")[1];
+    if (req.cookies["token"] || prevUserToken) {
+        // const token = cookies?.split("=")[1]; 
         const token = req.cookies["token"] || req.user.token;
         if (!token) {
             res.status(404).json({ message: "No token found", status: 404 });

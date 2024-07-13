@@ -23,7 +23,7 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
     next(); // dont forget this
   });
-// app.set("trust proxy", 1);
+app.set("trust proxy", 1);
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.json());
@@ -37,8 +37,8 @@ app.use(session({
     secret: process.env.JWT_SECRET_KEY,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
-    // proxy: true, // Required for Heroku & Digital Ocean (regarding X-Forwarded-For)
-    // name: 'MyCoolWebAppCookieName', // This needs to be unique per-host.
+    proxy: true, // Required for Heroku & Digital Ocean (regarding X-Forwarded-For)
+    name: 'MyCoolWebAppCookieName', // This needs to be unique per-host.
     store: new MongoDBStore({
             uri: process.env.DB_URL,
             databaseName: process.env.DB,

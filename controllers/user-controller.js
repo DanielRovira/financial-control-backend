@@ -79,9 +79,7 @@ const login = async (req, res, next) => {
 const verifyToken = (req, res, next) => {
     // console.log(req)
     console.log("verifyToken")
-    console.log(req.cookies)
     // console.log(req.headers)
-    console.log(req.cookie)
     console.log(req.session)
 
     // const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];

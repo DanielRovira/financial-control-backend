@@ -15,12 +15,16 @@ const authenticated = (req, res, next)=>{
     else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
 }
 
+const redirect = (req, res, next)=>{
+    return res.redirect(`${process.env.CORS}`)
+}
+
 router.post('/signup', signup);
 router.post('/login', login);
-router.get('/getUser', verifyToken, getUser); //consegue passar o parametro mas não o cookie?
 // router.get('/refreshtoken', verifyToken, refreshToken, getUser);
 router.get('/refreshtoken', (req, res, next) => {return res.status(200)});
-router.get('/oauthLogin', authenticated, oauthLogin); //gera o cookie
+router.get('/oauthLogin', authenticated, oauthLogin, redirect); //gera o cookie e redireciona pro front
+router.get('/getUser', verifyToken, getUser); //consegue passar o parametro mas não o cookie?
 // router.get('/oauthLogin', (req,res,next) => console.log(req));
 router.post('/logout', verifyToken, logout);
 

@@ -10,6 +10,7 @@ const logger = require('morgan');
 
 const app = express();
 
+const passportLocal = require('./routes/passport-local');
 const authRouter = require('./routes/auth');
 const userRoutes = require("./routes/user-routes");
 const DB = require("./routes/financial-control-routes");
@@ -19,7 +20,7 @@ app.use((req, res, next) => {
     next(); // dont forget this
   });
 app.set("trust proxy", 1);
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -41,6 +42,7 @@ app.use(session({
 app.use(passport.initialize()) 
 app.use(passport.authenticate('session'));
 
+// app.use("/api/login", passportLocal);
 app.use('/api/oauth', authRouter);
 app.use("/api", userRoutes);
 app.use(`/api/${process.env.DB}`, DB);

@@ -13,14 +13,22 @@ const authenticated = (req, res, next)=>{
     else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
 }
 
+const test = (req, res, next)=>{
+    console.log(req.user) 
+        next()
+}
+
 router.post('/signup', signup);
 router.post('/login', login);
 router.get('/refreshtoken', verifyToken, refreshToken, getUser);
 router.post('/logout', verifyToken, logout);
 
-router.get('/oauthLogin', authenticated, oauthLogin); //gera o cookie e redireciona pro front
-router.get('/getUser', verifyToken, getUser); //no front o parametro chega mas o cookie não funciona
-router.post('/tokenLogin', verifyToken, refreshToken, getUser); //entao o front pega o token que recebeu de getUser e posta um login, recebendo um novo token pro Domain do front
+// google redireciona de volta pra essa rota, que no final manda pro front
+router.get('/oauthLogin', test, authenticated, oauthLogin); //gera o cookie e redireciona pro front
+
+// front executa essas duas rotas em sequencia, pq só o a rota getuser não deixa um cookie do front
+router.get('/getUser', test, verifyToken, getUser); //no front o parametro chega mas o cookie não funciona
+router.post('/tokenLogin', test, verifyToken, refreshToken, getUser); //entao o front pega o token que recebeu de getUser e posta um login, recebendo um novo token pro Domain do front
 
 module.exports = router;
 

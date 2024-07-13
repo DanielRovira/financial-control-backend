@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose');
 const { listData, listSections, listCategories, addData, patchData, deleteData } = require('../controllers/db-controller');
 const { verifyToken } = require('../controllers/user-controller');
 const { ObjectId } = require('mongodb')
 
 const checkBody = (req,res,next) => {
     if ('_id' in req.body) {
-        req.body._id = ObjectId(req.body._id)
+        req.body._id = mongoose.Types.ObjectId(req.body._id)
     }
     next()
 }

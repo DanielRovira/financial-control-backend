@@ -80,12 +80,13 @@ const verifyToken = (req, res, next) => {
     // console.log(req)
     console.log("verifyToken")
     // console.log(req.headers)
-    console.log(req.session)
+    // console.log(req.session)
+    // console.log(req.user)
 
     // const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];
-    if (req.cookies["token"]) {
+    if (req.cookies["token"] || req.user.token) {
         // const token = cookies?.split("=")[1];
-        const token = req.cookies["token"];
+        const token = req.cookies["token"] || req.user.token;
         if (!token) {
             res.status(404).json({ message: "No token found", status: 404 });
         }
@@ -95,6 +96,7 @@ const verifyToken = (req, res, next) => {
             }
             // console.log(`Requisition by user: ${user.name}\n`, datetime);
             req.id = user.id;
+            // req.token = token
             next();
         })}
     else {return res.status(405).json({ message: "Couldn't find token", status: 405 })}
@@ -115,7 +117,7 @@ const getUser = async (req, res, next) => {
     // return res.status(200).json({ user });
     return res
     .status(200)
-    .json({ user: {name: user.name, email: user.email}, status: 200 });
+    .json({ user: {name: user.name, email: user.email, token: req.token}, status: 200 });
 };
 
 const refreshToken = (req, res, next) => {

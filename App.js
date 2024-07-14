@@ -34,7 +34,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         secure: process.env.CORS === 'http://localhost' ? false : true, // required for cookies to work on HTTPS
-        sameSite: 'strict',
+        sameSite: 'lax',
         maxAge: Number(process.env.EXP_TIME) || 1000 * 60 * 60 * 24 * 7 // 1 week
     }
 }));

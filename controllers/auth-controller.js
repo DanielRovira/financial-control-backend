@@ -1,37 +1,25 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
 
-const oauthLogin = async (req, res, next) => {
-    const userId = req.user.id;
-    let user;
-    try {
-        user = await User.findById(userId, "-password");
-    } catch (err) {
-        return new Error(err);
+const isAuthenticated = (req, res, next)=>{
+    if (req.user) {
+        next()
     }
-    if (!user) {
-        return res.status(404).json({ messsage: "User Not Found" });
-    }
+    else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
+}
 
-    const token = jwt.sign({ id: user._id, name: user.name }, process.env.JWT_SECRET_KEY, {
-        expiresIn: `${process.env.EXP_TIME}s`,
-    });
-
-    if (req.cookies["token"]) {
+const logout = (req, res, next) => {
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.clearCookie("token");
+        res.clearCookie("connect.sid");
         req.cookies["token"] = "";
-    }
+        req.cookies["connect.sid"] = "";
+        req.session.destroy()
+        res.redirect('/');
+      });
 
-    res.cookie("token", token
-        , {
-            path: "/",
-            expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-        }
-        );
 
-        return res.redirect(`${process.env.CORS}`)
+    // return res.status(200).json({ message: "Successfully Logged Out" });
 };
 
-exports.oauthLogin = oauthLogin;
+exports.isAuthenticated = isAuthenticated;
+exports.logout = logout;

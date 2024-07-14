@@ -32,12 +32,12 @@ app.use(session({
         collection: 'LoginSessions',
         // expires: Number(process.env.EXP_TIME) || 1000 * 60 * 60 * 24 * 7 // 1 week
     }),
-    // cookie: {
-    //     // httpOnly: true,
-    //     // secure: process.env.CORS === 'http://localhost' ? false : true, // required for cookies to work on HTTPS
-    //     // sameSite: 'lax',
-    //     maxAge: Number(process.env.EXP_TIME) || 1000 * 60 * 60 * 24 * 7 // 1 week
-    // }
+    cookie: {
+        // httpOnly: true,
+        // secure: process.env.CORS === 'http://localhost' ? false : true, // required for cookies to work on HTTPS
+        // sameSite: 'lax',
+        maxAge: Number(process.env.EXP_TIME) || 1000 * 60 * 60 * 24 * 7 // 1 week
+    }
 }));
 app.use(passport.initialize()) 
 app.use(passport.authenticate('session'));

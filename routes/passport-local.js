@@ -10,7 +10,6 @@ passport.use(new LocalStrategy({
     passwordField: 'password'},
     function(username, password, done) {
         User.findOne({ email: username }, function (err, user) {
-
             if (err) { return done(err); }
             if (!user) { return done(null, false); }
             if (!bcrypt.compareSync(password, user.password)) { return done(null, false); }
@@ -32,7 +31,7 @@ passport.deserializeUser(function(user, cb) {
 });
 
 router.post('/',
-    passport.authenticate('local', { failureRedirect: '/login' }),
+    passport.authenticate('local', { failureRedirect: '/' }),
     function(req, res) {
         return res
         .status(200)

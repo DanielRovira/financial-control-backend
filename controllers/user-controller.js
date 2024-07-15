@@ -66,35 +66,39 @@ const login = async (req, res, next) => {
         path: "/",
         expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
         httpOnly: true,
+        secure: true,
         sameSite: "lax",
     }
     );
   
     return res
         .status(200)
-        .json({ message: "Successfully Logged In", user: existingUser, token, status: 200 });
+        .json({ message: "Successfully Logged In", user: {name: existingUser.name, email: existingUser.email}, token, status: 200 });
 };
 
 const verifyToken = (req, res, next) => {
-    const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];
-    if (cookies) {
-    const token = cookies?.split("=")[1];
-    if (!token) {
-        res.status(404).json({ message: "No token found", status: 404 });
-    }
-    jwt.verify(String(token), process.env.JWT_SECRET_KEY, (err, user) => {
-        if (err) {
-            return res.status(400).json({ message: "Invalid Token", status: 400 });
+    prevUserToken = req.body?.user?.token
+    // const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];
+    if (req.cookies["token"] || prevUserToken) {
+        // const token = cookies?.split("=")[1]; 
+        const token = req.cookies["token"] || prevUserToken;
+        if (!token) {
+            res.status(404).json({ message: "No token found", status: 404 });
         }
-        // console.log(`Requisition by user: ${user.name}\n`, datetime);
-        req.id = user.id;
-        next();
-    })}
-    else {return res.status(400).json({ message: "Couldn't find token", status: 400 })}
+        jwt.verify(String(token), process.env.JWT_SECRET_KEY, (err, user) => {
+            if (err) {
+                return res.status(400).json({ message: "Invalid Token", status: 400 });
+            }
+            // console.log(`Requisition by user: ${user.name}\n`, datetime);
+            req.id = user.id;
+            req.token = token
+            next();
+        })}
+    else {return res.status(405).json({ message: "Couldn't find token", status: 405 })}
 };
 
 const getUser = async (req, res, next) => {
-    const userId = req.id;
+    const userId = req.id ||  req.user.id;
     let user;
     try {
         user = await User.findById(userId, "-password");
@@ -104,14 +108,19 @@ const getUser = async (req, res, next) => {
     if (!user) {
         return res.status(404).json({ messsage: "User Not Found" });
     }
-    return res.status(200).json({ user });
+
+    // return res.status(200).json({ user });
+    return res
+    .status(200)
+    .json({ user: {name: user.name, email: user.email, token: req.token}, status: 200 });
 };
 
 const refreshToken = (req, res, next) => {
+    const prevUserToken = req.token
     const cookies = req.headers.cookie?.split(";")[(req.headers.cookie?.split(";").length)-1];
 
-    if (cookies) {
-        const prevToken = cookies.split("=")[1];
+    if (cookies || req.cookies["token"] || prevUserToken) {
+        const prevToken = cookies?.split("=")[1] || req.cookies["token"] || prevUserToken;
         if (!prevToken) {
             return res.status(400).json({ message: "Couldn't find token" });
         }
@@ -135,6 +144,7 @@ const refreshToken = (req, res, next) => {
                 path: "/",
                 expires: new Date(Date.now() + 1000 * process.env.EXP_TIME), // seconds
                 httpOnly: true,
+                secure: true,
                 sameSite: "lax",
             });
 
@@ -161,7 +171,10 @@ const logout = (req, res, next) => {
             // res.clearCookie(`${user.id}`);
             // req.cookies[`${user.id}`] = "";
             res.clearCookie("token");
+            res.clearCookie("connect.sid");
             req.cookies["token"] = "";
+            req.cookies["connect.sid"] = "";
+            req.session.destroy()
             // console.log("Logout sucessfull\n", `User: ${user.name}\n`, datetime);
             return res.status(200).json({ message: "Successfully Logged Out" });
         });

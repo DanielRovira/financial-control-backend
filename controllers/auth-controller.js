@@ -63,11 +63,6 @@ const logout = (req, res, next) => {
         req.session.destroy()
         res.redirect('/');
       });
-
-
-    // return res.status(200).json({ message: "Successfully Logged Out" });
 };
 
-// exports.isAuthenticated = isAuthenticated;
-// exports.logout = logout;
 module.exports = { isAuthenticated, getUser, signup, logout }

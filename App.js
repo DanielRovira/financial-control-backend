@@ -7,12 +7,10 @@ const passport = require('passport');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const logger = require('morgan');
-const { isAuthenticated } = require('./controllers/auth-controller');
-
 const app = express();
 
-const userRoutes = require("./routes/user-routes");
-const DB = require("./routes/financial-control-routes");
+const authRoutes = require("./routes/auth-routes");
+const financeRoutes = require("./routes/finance-routes");
 
 app.use(logger('dev'));
 app.use(cookieParser());
@@ -39,8 +37,8 @@ app.use(session({
 app.use(passport.initialize()) 
 app.use(passport.authenticate('session'));
 
-app.use("/api", userRoutes);
-app.use(`/api/${process.env.DB}`, isAuthenticated, DB);
+app.use("/api", authRoutes);
+app.use(`/api/${process.env.DB}`, financeRoutes); //Não precisar utilizar o DB name. Mudar para "finance" e mudar no front tbm
 mongoose.set("strictQuery", false);     // Will be the default after Mongoose 7. Remove after that
 const connectionOptions = {
     dbName: process.env.DB,

@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose');
-const { listData, listSections, listCategories, addData, patchData, deleteData } = require('../controllers/db-controller');
-// const { verifyToken } = require('../controllers/user-controller');
-// const { ObjectId } = require('mongodb')
+const { listData, listSections, listCategories, addData, patchData, deleteData } = require('../controllers/finance-controller');
+const { isAuthenticated } = require('../controllers/auth-controller');
 
 const checkBody = (req,res,next) => {
     if ('_id' in req.body) {
@@ -12,6 +11,7 @@ const checkBody = (req,res,next) => {
     next()
 }
 
+router.use('*', isAuthenticated);
 router.get('/list/:id', listData);
 router.get('/sections', listSections);
 router.get('/categories', listCategories);

@@ -89,6 +89,3 @@ const deleteData = async (req, res) => {
 }
 
 module.exports = { listData, listSections, listCategories, addData, patchData, deleteData }
-
-// exports.addData = addData;
-// exports.listData = listData;

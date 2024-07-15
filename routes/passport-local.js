@@ -31,7 +31,7 @@ passport.deserializeUser(function(user, cb) {
 });
 
 router.post('/',
-    passport.authenticate('local', { failureRedirect: '/' }),
+    passport.authenticate('local'),
     function(req, res) {
         return res
         .status(200)

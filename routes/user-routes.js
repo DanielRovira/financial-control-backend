@@ -5,7 +5,7 @@ const login = require('./passport-local');
 const googleRouter = require('./google-auth');
 
 router.post('/signup', signup);
-router.use("/login", login);
+router.use('/login', login);
 // router.get('/user', isAuthenticated, getUser);
 router.get('/refreshtoken', isAuthenticated, getUser);
 router.post('/logout', isAuthenticated, logout);

@@ -5,10 +5,10 @@ const login = require('./passport-local');
 const googleRouter = require('./google-auth');
 
 router.post('/signup', signup);
-router.route("/login", login);
+router.use("/login", login);
 router.get('/getUser', isAuthenticated, getUser);
 router.get('/refreshtoken', isAuthenticated, getUser);
 router.post('/logout', isAuthenticated, logout);
-router.route('/oauth', googleRouter);
+router.use('/oauth', googleRouter);
 
 module.exports = router;

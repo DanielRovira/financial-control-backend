@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { signup, getUser } = require('../controllers/user-controller');
-const { isAuthenticated, logout } = require('../controllers/auth-controller');
+const { isAuthenticated, logout, getUser, signup } = require('../controllers/auth-controller');
+const login = require('./routes/passport-local');
+const googleRouter = require('./routes/google-auth');
 
 router.post('/signup', signup);
+router.route("/login", login);
+router.get('/getUser', isAuthenticated, getUser);
 router.get('/refreshtoken', isAuthenticated, getUser);
 router.post('/logout', isAuthenticated, logout);
-router.get('/getUser', isAuthenticated, getUser);
+app.route('/oauth', googleRouter);
 
 module.exports = router;

@@ -11,8 +11,6 @@ const { isAuthenticated } = require('./controllers/auth-controller');
 
 const app = express();
 
-const passportLocal = require('./routes/passport-local');
-const googleRouter = require('./routes/google-auth');
 const userRoutes = require("./routes/user-routes");
 const DB = require("./routes/financial-control-routes");
 
@@ -21,7 +19,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set("trust proxy", true)
-app.use(cors({ credentials: true, origin: [process.env.CORS] }))
+app.use(cors({ credentials: true, origin: process.env.CORS }))
 app.use(session({
     secret: process.env.JWT_SECRET_KEY,
     resave: false,
@@ -41,8 +39,6 @@ app.use(session({
 app.use(passport.initialize()) 
 app.use(passport.authenticate('session'));
 
-app.use("/api/login", passportLocal);
-app.use('/api/oauth', googleRouter);
 app.use("/api", userRoutes);
 app.use(`/api/${process.env.DB}`, isAuthenticated, DB);
 mongoose.set("strictQuery", false);     // Will be the default after Mongoose 7. Remove after that

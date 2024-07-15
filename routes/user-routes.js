@@ -9,6 +9,6 @@ router.route("/login", login);
 router.get('/getUser', isAuthenticated, getUser);
 router.get('/refreshtoken', isAuthenticated, getUser);
 router.post('/logout', isAuthenticated, logout);
-app.route('/oauth', googleRouter);
+routet.route('/oauth', googleRouter);
 
 module.exports = router;

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { isAuthenticated, logout, getUser, signup } = require('../controllers/auth-controller');
-const login = require('./routes/passport-local');
-const googleRouter = require('./routes/google-auth');
+const login = require('./passport-local');
+const googleRouter = require('./google-auth');
 
 router.post('/signup', signup);
 router.route("/login", login);

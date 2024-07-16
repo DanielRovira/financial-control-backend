@@ -1,3 +1,5 @@
+// Not in use anymore after passport implementation
+
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');

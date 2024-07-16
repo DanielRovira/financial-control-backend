@@ -4,6 +4,7 @@ const passport = require('passport');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 var LocalStrategy = require('passport-local');
+var GoogleStrategy = require('passport-google-oauth20');
 
 passport.use(new LocalStrategy({
     usernameField: 'email',
@@ -17,6 +18,19 @@ passport.use(new LocalStrategy({
         });
     }
 ));
+
+passport.use(new GoogleStrategy({
+  clientID: process.env['GOOGLE_CLIENT_ID'],
+  clientSecret: process.env['GOOGLE_CLIENT_SECRET'],
+  callbackURL: `${process.env.CORS}/api/login/oauth2/redirect/google`,
+  scope: [ 'profile' , 'email' ],
+  state: true
+},
+function(accessToken, refreshToken, profile, cb) {
+  User.findOne({ email: profile.emails[0].value }, function (err, user) {
+    return cb(err, user);
+  });
+}))
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
@@ -38,5 +52,11 @@ router.post('/',
         .json({ message: "Successfully Logged In", user: {name: req.user.name, email: req.user.email}, status: 200 });      
     }
 );
+
+router.get('/federated/google', passport.authenticate('google'));
+router.get('/oauth2/redirect/google', passport.authenticate('google', {
+    successReturnToOrRedirect: `/`,
+    failureRedirect: process.env.CORS
+}));
 
 module.exports = router;

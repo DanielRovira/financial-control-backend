@@ -1,22 +1,15 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose');
-const { listData, listSections, listCategories, addData, patchData, deleteData } = require('../controllers/finance-controller');
+const { listData, listSections, listCategories, addData, patchData, deleteData, checkBody, checkCollection } = require('../controllers/finance-controller');
 const { isAuthenticated } = require('../controllers/auth-controller');
 
-const checkBody = (req,res,next) => {
-    if ('_id' in req.body) {
-        req.body._id = mongoose.Types.ObjectId(req.body._id)
-    }
-    next()
-}
-
 router.use('*', isAuthenticated);
-router.get('/list/:id', listData);
 router.get('/sections', listSections);
 router.get('/categories', listCategories);
-router.post('/add/:id', addData);
-router.patch('/update/:id', checkBody, patchData);
-router.delete('/delete/:id', checkBody, deleteData);
+router.get('/list/:id', checkCollection, listData);
+router.post('/add/:id', checkCollection, addData);
+router.patch('/update/:id', checkCollection, checkBody, patchData);
+router.delete('/delete/:id', checkCollection, checkBody, deleteData);
 
 module.exports = router

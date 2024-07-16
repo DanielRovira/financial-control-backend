@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const mongoose = require('mongoose');
 const { listData, listSections, listCategories, addData, patchData, deleteData, checkBody, checkCollection } = require('../controllers/finance-controller');
 const { isAuthenticated } = require('../controllers/auth-controller');
+const documentAI  = require('../controllers/documentAI');
+
+router.post('/uploadFile', documentAI);
 
 router.use('*', isAuthenticated);
 router.get('/sections', listSections);

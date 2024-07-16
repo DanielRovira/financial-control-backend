@@ -44,12 +44,9 @@ passport.deserializeUser(function(user, cb) {
     });
 });
 
-router.post('/',
-    passport.authenticate('local'),
+router.post('/', passport.authenticate('local'),
     function(req, res) {
-        return res
-        .status(200)
-        .json({ message: "Successfully Logged In", user: {name: req.user.name, email: req.user.email}, status: 200 });      
+        return res.status(200).json({ user: {name: req.user.name, email: req.user.email} });      
     }
 );
 

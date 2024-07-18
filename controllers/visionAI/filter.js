@@ -6,8 +6,13 @@ const filter = (apiRequest, requestType) => {
     if (requestType === "images") {
         request = apiRequest.responses[0].fullTextAnnotation.text
     }
-
-    let response
+    
+    //universal for first $ symbol
+    let response = {
+        text: request,
+        fields: request.split("\n"),
+        amount: request.slice(request.search(/\$/)).slice(2).split("\n")[0]
+    }
 
     if (request.search("infinitepay") !== -1) {
         response = {
@@ -25,17 +30,7 @@ const filter = (apiRequest, requestType) => {
             cnpj: request.split("\n")[6].slice(22),
         }
     }
-    // if (origin.search("")) {
 
-    // }
-
-    // universal for first $ symbol
-    // amount = request.slice(request.search(/\$/)).slice(2).split("\n")[0]
-    
-    // let response = {
-    //     amount: amount
-
-    // }
     return response
 }
 

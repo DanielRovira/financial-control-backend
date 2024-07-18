@@ -2,9 +2,11 @@ const express = require('express')
 const router = express.Router()
 const { listData, listSections, listCategories, addData, patchData, deleteData, checkBody, checkCollection } = require('../controllers/finance-controller');
 const { isAuthenticated } = require('../controllers/auth-controller');
-const documentAI  = require('../controllers/documentAI');
+// const documentAI  = require('../controllers/documentAI');
+const visionAI  = require('../controllers/visionAI');
 
-router.post('/uploadFile', documentAI);
+
+router.post('/uploadFile', visionAI);
 
 router.use('*', isAuthenticated);
 router.get('/sections', listSections);

@@ -11,6 +11,9 @@ const app = express();
 
 const authRoutes = require("./routes/auth-routes");
 const financeRoutes = require("./routes/finance-routes");
+const fileUpload = require('express-fileupload');
+
+app.use(fileUpload());
 
 app.use(logger('dev'));
 app.use(cookieParser());

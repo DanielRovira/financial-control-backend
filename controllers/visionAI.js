@@ -25,7 +25,7 @@ const visionAI = async (req, res, next) => {
         requestType = "images"
     }
     
-    const apiRequest = await fetch(`https://vision.googleapis.com/v1/${requestType}:annotate?key=AIzaSyDPyRgXAJe2Vo7UPnQfnOUgFDAmTlh-ONY`,
+    const apiRequest = await fetch(`https://vision.googleapis.com/v1/${requestType}:annotate?key=${process.env.GOOGLE_API_KEY}`,
     {
         method:'POST',
         headers: { 'Content-Type': 'application/json' },

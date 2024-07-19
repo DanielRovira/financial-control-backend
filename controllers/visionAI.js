@@ -1,8 +1,11 @@
 const filter = require('./visionAI/filter');
-    
+
 const visionAI = async (req, res, next) => {
     const fileData = req.files?.file.data
-    const encodedImage = Buffer.from(fileData).toString('base64');
+    let encodedImage
+    if (fileData) {
+        encodedImage = Buffer.from(fileData).toString('base64');
+    }
     let requestType
     const features = [{type: 'DOCUMENT_TEXT_DETECTION'}];
     const request = {
@@ -13,7 +16,7 @@ const visionAI = async (req, res, next) => {
         ]
     }
     if (req.files.file.mimetype === "application/pdf") {
-        request.requests[0].inputConfig =  {"content": encodedImage, "mimeType": "application/pdf"}
+        request.requests[0].inputConfig =  {content: encodedImage, mimeType: "application/pdf"}
         requestType = "files"
     }
     if (req.files.file.mimetype.slice(0,5) === "image") {

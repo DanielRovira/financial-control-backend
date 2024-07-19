@@ -1,4 +1,6 @@
 const filter = (apiRequest, requestType) => {
+    if (!apiRequest.responses) { return apiRequest }
+
     let request
     if (requestType === "files") {
         request = apiRequest.responses[0].responses[0].fullTextAnnotation.text
@@ -15,7 +17,7 @@ const filter = (apiRequest, requestType) => {
     }
 
     if (request.search("infinitepay") !== -1) {
-        response = {
+        response = {...response,
             amount: request.split("\n")[7].slice(3),
             date: request.split("\n")[2].slice(0,11),
             destiny: request.split("\n")[9],
@@ -23,7 +25,7 @@ const filter = (apiRequest, requestType) => {
         }
     }
     if (request.search("Comprovante de Pagamento PIX") !== -1) {
-        response = {
+        response = {...response,
             amount: request.split("\n")[1].slice(10),
             date: request.split("\n")[2].slice(14,24),
             destiny: request.split("\n")[5].slice(22),

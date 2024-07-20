@@ -1,3 +1,4 @@
+const util = require('util');
 const filter = (apiRequest, requestType) => {
     if (!apiRequest.responses) { return apiRequest }
 
@@ -15,16 +16,33 @@ const filter = (apiRequest, requestType) => {
         fields: request.split("\n"),
         amount: request.slice(request.search(/\$/)).slice(2).split("\n")[0]
     }
-
+ 
     if (request.search("infinitepay") !== -1) {
-        response = {...response,
-            amount: request.split("\n")[7].slice(3),
-            date: new Date(request.split("\n")[2].slice(0,11)).toISOString().slice(0,10),
-            destiny: request.split("\n")[9],
-            cnpj: request.split("\n")[11],
+        let data = request.split("\n")
+        function identify(data) {
+            function isValidDate(date) {
+                test = new Date(date)
+                return test instanceof Date && !isNaN(test);
+              }
+            let date = data[2].slice(0,11)
+            response = {...response,
+                // amount: data[7].slice(3),
+                date: isValidDate(date) ? new Date(date).toISOString().slice(0,10) : new Date().toISOString().slice(0,10),
+                destiny: data[9],
+                cnpj: data[11],
+            }
         }
+        if (data[1] === "O infinitepay") {
+            let newData = data.slice(1)
+            identify(newData)
+        }
+        if (data[0] === "O infinitepay") {
+            identify(data)
+        }
+
     }
-    if (request.search("Comprovante de Pagamento PIX") !== -1) {
+
+    if (request.search("Instituição do pagador: BANCO COOPERATIVO SICREDI S.A.") !== -1) {
         let date = request.split("\n")[2].slice(14,24)
         response = {...response,
             amount: request.split("\n")[1].slice(10),

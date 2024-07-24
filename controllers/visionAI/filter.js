@@ -14,9 +14,11 @@ const filter = (apiRequest, requestType) => {
     let response = {
         text: request,
         fields: data,
-        amount: request.slice(request.search(/\$/)).slice(2).split("\n")[0]
+        // amount: request.slice(request.search(/\$/)+1).replace(':', '').split("\n")[0].trim()
+        amount: request.search(/\$/) !== -1 ? request.slice(request.search(/\$/)+1).replace(':', '').split("\n")[0].trim() : ''
     }
- 
+
+    // Infinitepay
     if (request.search("O infinitepay") !== -1) {
         let index = data.findIndex(item => item === "O infinitepay");
         let newData = data.slice(index)
@@ -33,13 +35,17 @@ const filter = (apiRequest, requestType) => {
         }
     }
 
-    if (request.search("Instituição do pagador: BANCO COOPERATIVO SICREDI S.A.") !== -1) {
-        let date = data[2].slice(14,24)
+    // SICREDI
+    if (request.search("Instituição do pagador: BANCO COOPERATIVO SICREDI S.A.") !== -1 &&
+        request.search("Comprovante de Pagamento PIX") !== -1) {
+        let index = data.findIndex(item => item.slice(0,6) === "Valor:");
+        let newData = data.slice(index)
+        let date = newData[1].slice(14,24)
         response = {...response,
-            amount: data[1].slice(10),
+            amount: newData[0].slice(10),
             date: `${date.slice(-4)}-${date.slice(3,5)}-${date.slice(0,2)}`,
-            destiny: data[5].slice(22),
-            cnpj: data[6].slice(22),
+            destiny: newData[4].slice(22),
+            cnpj: newData[5].slice(22),
         }
     }
 
@@ -65,6 +71,33 @@ const filter = (apiRequest, requestType) => {
             destiny: newData[8].slice(6),
             cnpj: newData[9].slice(6),
         }
+    }
+
+    // Banco do Brasil
+    if (request.search("BANCO DO BRASIL") !== -1) {
+        if (request.search("COMPROVANTE DE TED") !== -1) {
+            if (data[2] === "BANCO DO BRASIL") {
+                let date = data[0]
+                response = {...response,
+                    amount: data[31],
+                    date: `${date.slice(-4)}-${date.slice(3,5)}-${date.slice(0,2)}`,
+                    destiny: data[6].slice(9),
+                    cnpj: "",
+                }
+            }
+        }
+        if (request.search("Comprovante Pix") !== -1) {
+            if (data[8] === "Comprovante Pix") {
+                let date = data[2]
+                response = {...response,
+                    amount: data[19].slice(2),
+                    date: `${date.slice(-4)}-${date.slice(3,5)}-${date.slice(0,2)}`,
+                    destiny: data[9].slice(9),
+                    cnpj: data[18],
+                }
+            }
+        }
+
     }
 
     return response

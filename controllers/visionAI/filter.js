@@ -19,19 +19,20 @@ const filter = (apiRequest, requestType) => {
     }
 
     // Infinitepay
-    if (request.search("O infinitepay") !== -1) {
-        let index = data.findIndex(item => item === "O infinitepay");
+    if (request.search("infinitepay") !== -1) {
+        let index = data.findIndex(item => item === "Comprovante");
         let newData = data.slice(index)
+        let index2 = data.findIndex(item => item === "CNPJ") -1;
         function isValidDate(date) {
             test = new Date(date)
             return test instanceof Date && !isNaN(test);
           }
-        let date = newData[2].slice(0,11)
+        let date = newData[1]?.slice(0,11)
+        console.log(isValidDate(data[1]?.slice(0,11)))
         response = {...response,
             // amount: data[7].slice(3),
-            date: isValidDate(date) ? new Date(date).toISOString().slice(0,10) : new Date().toISOString().slice(0,10),
-            destiny: newData[9],
-            cnpj: newData[11],
+            date: isValidDate(date) ? new Date(date).toISOString().slice(0,10) : isValidDate(data[1]?.slice(0,11)) ? new Date(data[1]?.slice(0,11)).toISOString().slice(0,10) : new Date().toISOString().slice(0,10),
+            destiny: data[index2],
         }
     }
 
@@ -61,15 +62,16 @@ const filter = (apiRequest, requestType) => {
         }
     }
 
-    if (request.search("Pagamento com Pix") !== -1) {
-        let index = data.findIndex(item => item === "Pagamento com Pix");
-        let newData = data.slice(index)
-        let date = newData[6].slice(0,10)
+    if (request.search("Pagamento com Pix") !== -1 && request.search("Instituição: BANCO COOPERATIVO SICREDI S.A.") !== -1) {
+        let index = data.findIndex(item => item.slice(0,3) === "ID:") + 1;
+        let index2 = data.findIndex(item => item === "Dados do destinatário") + 1;
+        let date = data[index].slice(0,10)
+        console.log(date)
         response = {...response,
-            amount: newData[4].slice(3),
+            // amount: newData[4].slice(3),
             date: `${date.slice(-4)}-${date.slice(3,5)}-${date.slice(0,2)}`,
-            destiny: newData[8].slice(6),
-            cnpj: newData[9].slice(6),
+            destiny: data[index2].slice(6),
+            // cnpj: newData[9].slice(6),
         }
     }
 

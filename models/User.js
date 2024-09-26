@@ -17,6 +17,9 @@ const userSchema = new Schema({
         required: true,
         minlength: 6,
     },
+    database: {
+        type: String,
+    }
 });
 
 const myDB = mongoose.connection.useDb('USERS');

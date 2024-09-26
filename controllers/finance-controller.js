@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const { financialSchema, sectionSchema } = require('../models/Finance');
 
-
+const typeSet = ["sections", "categories"];
 
 const getTenantDb = (user) => {
     const userDatabase = user.database ? user.database : user.id
@@ -10,9 +10,10 @@ const getTenantDb = (user) => {
 }
 
 const listData = async (req, res) => {
-    const collection = req.params.id
+    let collection = req.params.id.split("-")[0]
+    let sheetType = req.params.id.split("-")[1]
     try {
-        const post = await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, collection).find()
+        const post = await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, "finances").find({ costCenter: collection , status: sheetType })
         res.send({post, status: 200});
     } catch (error) {
         res.status(500);
@@ -38,7 +39,7 @@ const listCategories = async (req, res) => {
 }
 
 const addData = async (req, res) => {
-    const collection = req.params.id
+    const collection = typeSet.includes(req.params.id.split("-")[0]) ? req.params.id : "finances"
     try {
         const post = getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, collection)
         const add = new post(req.body)
@@ -50,9 +51,8 @@ const addData = async (req, res) => {
 }
 
 const patchData = async (req, res) => {
-    const collection = req.params.id
     try {
-        const post = await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, collection).findByIdAndUpdate(req.body._id , req.body)
+        const post = await getTenantDb(req.user).model(`${req.user.id}-${req.params.id}`, financialSchema, "finances").findByIdAndUpdate(req.body._id , req.body)
         await post.save();
         res.send(req.body);
     } catch {
@@ -61,9 +61,9 @@ const patchData = async (req, res) => {
 }
 
 const deleteData = async (req, res) => {
-    const collection = req.params.id
+    const collection = typeSet.includes(req.params.id.split("-")[0]) ? req.params.id.split("-")[0] : "finances"
     try {
-        await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, collection).findByIdAndRemove(req.body._id)
+        await getTenantDb(req.user).model(`${req.user.id}-${req.params.id}`, financialSchema, collection).findByIdAndRemove(req.body._id)
         res.status(204).send()
     } catch {
 		res.status(404)
@@ -78,17 +78,14 @@ const checkBody = (req,res,next) => {
 }
 
 const checkCollection = async (req,res,next) => {
-    const sheetTypeSet = ["financialControl", "todoPayments"];
-    const typeSet = ["sections", "categories"];
     let collection = req.params.id.split("-")[0]
-    let sheetType = req.params.id.split("-")[1]
     let post
     try {
         post = await getTenantDb(req.user).model(`${req.user.id}-sections`, sectionSchema, "sections").findOne({ title: collection })
     } catch (error) {
         res.status(500);
     }
-    if (post && sheetTypeSet.includes(sheetType) || typeSet.includes(collection)) {
+    if (post || typeSet.includes(collection)) {
         next()
     }
     else {

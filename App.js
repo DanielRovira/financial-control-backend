@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: false,
     store: new MongoDBStore({
         uri: process.env.DB_URL,
-        databaseName: process.env.DB,
+        databaseName: 'USERS',
         collection: 'LoginSessions',
     }),
     cookie: {
@@ -50,7 +50,7 @@ const findDB = (req, res, next)=>{
 }
 
 app.use("/api", authRoutes);
-app.use(`/api/:clientID`, findDB, financeRoutes); //Não precisar utilizar o DB name. Mudar para "finance" e mudar no front tbm
+app.use(`/api/finances`, findDB, financeRoutes);
 mongoose.set("strictQuery", false);     // Will be the default after Mongoose 7. Remove after that
 const connectionOptions = {
     // dbName: process.env.DB,

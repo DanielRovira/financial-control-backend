@@ -40,11 +40,20 @@ app.use(session({
 app.use(passport.initialize()) 
 app.use(passport.authenticate('session'));
 
+
+const findDB = (req, res, next)=>{
+    if (req.user) {
+        req.clientID = req.params.clientID
+        next()
+    }
+    else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
+}
+
 app.use("/api", authRoutes);
-app.use(`/api/${process.env.DB}`, financeRoutes); //Não precisar utilizar o DB name. Mudar para "finance" e mudar no front tbm
+app.use(`/api/:clientID`, findDB, financeRoutes); //Não precisar utilizar o DB name. Mudar para "finance" e mudar no front tbm
 mongoose.set("strictQuery", false);     // Will be the default after Mongoose 7. Remove after that
 const connectionOptions = {
-    dbName: process.env.DB,
+    // dbName: process.env.DB,
     useUnifiedTopology: true
 }
 

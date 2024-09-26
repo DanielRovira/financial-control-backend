@@ -32,8 +32,8 @@ const sectionSchema = new Schema({
     type: String,
 })
 
-const Section = mongoose.model('Section', sectionSchema);
-const Category = mongoose.model('Category', sectionSchema);
+// const Section = mongoose.model('Section', sectionSchema);
+// const Category = mongoose.model('Category', sectionSchema);
 
-module.exports = { financialSchema, Section, Category  }
+module.exports = { financialSchema, sectionSchema }
 

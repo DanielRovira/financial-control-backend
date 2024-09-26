@@ -19,6 +19,8 @@ const userSchema = new Schema({
     },
 });
 
-module.exports = mongoose.model('User', userSchema);
+const myDB = mongoose.connection.useDb(process.env.DB);
+
+module.exports = myDB.model('User', userSchema);
 
 // users

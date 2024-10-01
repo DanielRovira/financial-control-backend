@@ -19,6 +19,9 @@ const userSchema = new Schema({
     },
     database: {
         type: String,
+    },
+    permissions: {
+        type: Object,
     }
 });
 

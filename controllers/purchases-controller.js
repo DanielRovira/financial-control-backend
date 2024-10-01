@@ -1,11 +1,10 @@
 const mongoose = require("mongoose")
 const { purchaseSchema } = require('../models/Purchase');
 
-const typeSet = ["sections", "categories"];
-
 const getTenantDb = (user) => {
-    const userDatabase = user.database ? user.database : user.id
-    const db = mongoose.connection.useDb(userDatabase, { useCache: true });
+    // const userDatabase = user.database ? user.database : user.id
+    const databaseId = process.env.DEFAULT_USER_DB || user.id
+    const db = mongoose.connection.useDb(databaseId, { useCache: true });
     return db;
 }
 

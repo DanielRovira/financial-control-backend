@@ -42,17 +42,17 @@ app.use(passport.initialize())
 app.use(passport.authenticate('session'));
 
 
-const findDB = (req, res, next)=>{
-    if (req.user) {
-        req.clientID = req.params.clientID
-        next()
-    }
-    else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
-}
+// const findDB = (req, res, next)=>{
+//     if (req.user) {
+//         req.clientID = req.params.clientID
+//         next()
+//     }
+//     else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
+// }
 
 app.use("/api", authRoutes);
-app.use(`/api/finances`, findDB, financeRoutes);
-app.use(`/api/purchases`, findDB, purchasesRoutes);
+app.use(`/api/finances`, financeRoutes);
+app.use(`/api/purchases`, purchasesRoutes);
 mongoose.set("strictQuery", false);     // Will be the default after Mongoose 7. Remove after that
 const connectionOptions = {
     // dbName: process.env.DB,

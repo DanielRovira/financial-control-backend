@@ -1,15 +1,16 @@
 const User = require('../models/User');
 
 const isAdminAuthenticated = (req, res, next)=>{
-    const userId =  req.user.id;
-    if (userId === process.env.DEFAULT_USER_DB) {
-        next()
+    if (req.user) {
+        if (req.user.id === process.env.DEFAULT_USER_DB) {
+            next()
+        }
+        else {return res.status(400).json({ message: "User is not Admin", status: 400 })}
     }
-    else {return res.status(400).json({ message: "User is not Admin", status: 400 })}
+    else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
 }
 
 const getUsersList = async (req, res, next) => {
-    const userId =  req.user.id;
     let users;
     try {
         users = await User.find({}, "-password -__v");
@@ -26,7 +27,6 @@ const getUsersList = async (req, res, next) => {
 };
 
 const patchUserData = async (req, res) => {
-    // console.log(req.params.id)
     try {
         const post = await User.findByIdAndUpdate(req.params.id , req.body)
         await post.save();

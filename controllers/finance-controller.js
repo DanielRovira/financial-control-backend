@@ -2,28 +2,36 @@ const mongoose = require("mongoose")
 const { financialSchema, sectionSchema } = require('../models/Finance');
 
 const typeSet = ["sections", "categories"];
-
+const defaultDB = process.env.DEFAULT_USER_DB
 const getTenantDb = (user) => {
     // const userDatabase = user.database ? user.database : user.id
-    const databaseId = process.env.DEFAULT_USER_DB || user.id
+    const databaseId = defaultDB || user.id
     const db = mongoose.connection.useDb(databaseId, { useCache: true });
     return db;
 }
 
 const listData = async (req, res) => {
+    let permissions = Object.getOwnPropertyNames(req.user.permissions)
     let collection = req.params.id.split("-")[0]
     let sheetType = req.params.id.split("-")[1]
-    try {
-        const post = await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, "finances").find({ costCenter: collection , status: sheetType })
-        res.send({post, status: 200});
-    } catch (error) {
-        res.status(500);
+    if (permissions.includes(collection)) {
+        if (Object.getOwnPropertyNames(req.user.permissions[collection]).includes(sheetType)) {
+            try {
+                const post = await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, "finances").find({ costCenter: collection , status: sheetType })
+                res.send({post, status: 200});
+            } catch (error) {
+                res.status(500);
+            }
+        }
+        else res.send({message: "Unauthorized", status: 200})
     }
+    else res.send({message: "Unauthorized cost centre", status: 200})
 }
 
 const listSections = async (req, res) => {
+    let permissions = req.user.id === defaultDB ? undefined : { title: Object.getOwnPropertyNames(req.user.permissions) } 
     try {
-        const post = await getTenantDb(req.user).model(`${req.user.id}-sections`, sectionSchema, "sections").find()
+        const post = await getTenantDb(req.user).model(`${req.user.id}-sections`, sectionSchema, "sections").find(permissions)
         res.send(post);
     } catch (error) {
         res.status(500);
@@ -42,7 +50,7 @@ const listCategories = async (req, res) => {
 const addData = async (req, res) => {
     const collection = typeSet.includes(req.params.id.split("-")[0]) ? req.params.id : "finances"
     try {
-        const post = getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, collection)
+        const post = getTenantDb(req.user).model(`${req.user.id}-${collection}`, collection === "finances" ? financialSchema : sectionSchema, collection)
         const add = new post(req.body)
         await add.save();
         res.send(add);

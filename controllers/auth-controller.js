@@ -25,23 +25,6 @@ const getUser = async (req, res, next) => {
     .json({ user: {name: user.name, email: user.email}, status: 200 });
 };
 
-const getUsersList = async (req, res, next) => {
-    const userId =  req.user.id;
-    let users;
-    try {
-        users = await User.find({}, "-password -__v -database -_id");
-    } catch (err) {
-        return new Error(err);
-    }
-    if (!users) {
-        return res.status(404).json({ messsage: "Users Not Found" });
-    }
-
-    return res
-    .status(200)
-    .json({ users: users, status: 200 });
-};
-
 const signup = async (req, res, next) => {
     const { name, email, password } = req.body;
     let existingUser;
@@ -82,4 +65,4 @@ const logout = (req, res, next) => {
       });
 };
 
-module.exports = { isAuthenticated, getUser, signup, logout, getUsersList }
+module.exports = { isAuthenticated, getUser, signup, logout }

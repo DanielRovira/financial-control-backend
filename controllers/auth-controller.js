@@ -11,6 +11,7 @@ const isAuthenticated = (req, res, next)=>{
 const getUser = async (req, res, next) => {
     const userId =  req.user.id;
     let user;
+    let type
     try {
         user = await User.findById(userId, "-password");
     } catch (err) {
@@ -20,9 +21,16 @@ const getUser = async (req, res, next) => {
         return res.status(404).json({ messsage: "User Not Found" });
     }
 
+    if (userId === process.env.DEFAULT_USER_DB) {
+        type = "admin"
+    }
+    else {
+        type = "user"
+    }
+
     return res
     .status(200)
-    .json({ user: {name: user.name, email: user.email}, status: 200 });
+    .json({ user: {name: user.name, email: user.email, type: type}, status: 200 });
 };
 
 const signup = async (req, res, next) => {

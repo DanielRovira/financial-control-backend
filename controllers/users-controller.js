@@ -1,5 +1,13 @@
 const User = require('../models/User');
 
+const isAdminAuthenticated = (req, res, next)=>{
+    const userId =  req.user.id;
+    if (userId === process.env.DEFAULT_USER_DB) {
+        next()
+    }
+    else {return res.status(400).json({ message: "User is not Admin", status: 400 })}
+}
+
 const getUsersList = async (req, res, next) => {
     const userId =  req.user.id;
     let users;
@@ -28,4 +36,4 @@ const patchUserData = async (req, res) => {
 	}
 }
 
-module.exports = { getUsersList, patchUserData }
+module.exports = { isAdminAuthenticated, getUsersList, patchUserData }

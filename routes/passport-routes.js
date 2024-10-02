@@ -34,7 +34,7 @@ function(accessToken, refreshToken, profile, cb) {
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
-        cb(null, { id: user.id, email: user.email, name: user.name, permissons: user.permissons });
+        cb(null, { id: user.id, email: user.email, name: user.name, permissions: user.permissions });
     });
 });
 

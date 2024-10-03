@@ -5,7 +5,7 @@ const isAuthenticated = (req, res, next)=>{
     if (req.user) {
         next()
     }
-    else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
+    else {return res.status(400).json({ message: "User Not Found", status: 400 })}
 }
 
 const getUser = async (req, res, next) => {

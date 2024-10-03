@@ -1,14 +1,16 @@
 const mongoose = require("mongoose")
 const { User, Session } = require('../models/User');
 
+const defaultDB = process.env.DEFAULT_USER_DB
+
 const isAdminAuthenticated = (req, res, next)=>{
     if (req.user) {
-        if (req.user.id === process.env.DEFAULT_USER_DB) {
+        if (req.user.id === defaultDB) {
             next()
         }
-        else {return res.status(400).json({ message: "User is not Admin", status: 400 })}
+        else {return res.status(403).json({ message: "User is not Admin" })}
     }
-    else {return res.status(400).json({ message: "Couldn't find user", status: 400 })}
+    else {return res.status(404).json({ message: "User Not Found" })}
 }
 
 const getUsersList = async (req, res, next) => {
@@ -34,8 +36,8 @@ const patchUserData = async (req, res) => {
         await Session.deleteMany({ 'session.passport.user.id': req.params.id})
         res.send(req.body);
     } catch {
-		res.status(404)
-	}
+        res.status(404)
+    }
 }
 
 module.exports = { isAdminAuthenticated, getUsersList, patchUserData }

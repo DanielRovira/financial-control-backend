@@ -16,7 +16,7 @@ const listData = async (req, res) => {
 
     try {
         const post = await getTenantDb(req.user).model(`listData-${req.user.id}`, purchaseSchema, "purchases").find(permissions)
-        res.send({post, status: 200});
+        res.status(200).send({post, status: 200});
     } catch (error) {
         res.status(500);
     }
@@ -25,33 +25,42 @@ const listData = async (req, res) => {
 const addData = async (req, res) => {
     let body = req.body
     body.creator = req.user.name
-    try {
-        const post = getTenantDb(req.user).model(`addData-${req.user.id}`, purchaseSchema, "purchases")
-        const add = new post(body)
-        await add.save();
-        res.send(add);
-    } catch (error) {
-        res.status(500);
+    if (req.user.permissions?.[req.body.costCenter]?.purchases === "edit") {
+        try {
+            const post = getTenantDb(req.user).model(`addPurchasesData-${req.user.id}`, purchaseSchema, "purchases")
+            const add = new post(body)
+            await add.save();
+            res.status(200).send(add);
+        } catch (error) {
+            res.status(500);
+        }
     }
+    else res.status(403).send({message: "Forbidden cost centre"})
 }
 
 const patchData = async (req, res) => {
-    try {
-        const post = await getTenantDb(req.user).model(`patchData-${req.user.id}`, purchaseSchema, "purchases").findByIdAndUpdate(req.body._id , req.body)
-        await post.save();
-        res.send(req.body);
-    } catch {
-		res.status(404)
-	}
+    if (req.user.permissions?.[req.body.costCenter]?.purchases === "edit") {
+        try {
+            const post = await getTenantDb(req.user).model(`patchPurchasesData-${req.user.id}`, purchaseSchema, "purchases").findByIdAndUpdate(req.body._id , req.body)
+            await post.save();
+            res.status(200).send(req.body);
+        } catch {
+	    	res.status(404)
+	    }
+    }
+    else res.status(403).send({message: "Forbidden cost centre"})
 }
 
 const deleteData = async (req, res) => {
-    try {
-        await getTenantDb(req.user).model(`deleteData-${req.user.id}`, purchaseSchema, "purchases").findByIdAndRemove(req.body._id)
-        res.status(204).send()
-    } catch {
-		res.status(404)
-	}
+    if (req.user.permissions?.[req.body.costCenter]?.purchases === "edit") {
+        try {
+            await getTenantDb(req.user).model(`deletePurchasesData-${req.user.id}`, purchaseSchema, "purchases").findByIdAndRemove(req.body._id)
+            res.status(204).send()
+        } catch {
+            res.status(404)
+        }
+    }
+    else res.status(403).send({message: "Forbidden cost centre"})
 }
 
 const checkBody = (req,res,next) => {

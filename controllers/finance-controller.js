@@ -19,7 +19,7 @@ const listData = async (req, res) => {
     const submit = async () => {
         try {
             const post = await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, "finances").find({ costCenter: collection , status: sheetType })
-            res.send({post, status: 200});
+            res.status(200).send({post, status: 200});
         } catch (error) {
             res.status(500);
         }
@@ -33,9 +33,9 @@ const listData = async (req, res) => {
             if (Object.getOwnPropertyNames(req.user.permissions[collection]).includes(sheetType)) {
                 submit()
             }
-            else res.send({message: "Unauthorized", status: 200})
+            else res.status(401).send({message: "Unauthorized", status: 200})
         }
-        else res.send({message: "Unauthorized cost centre", status: 200})
+        else res.status(403).send({message: "Forbidden cost centre", status: 200})
     }
 }
 
@@ -43,7 +43,7 @@ const listSections = async (req, res) => {
     let permissions = req.user.id === defaultDB ? undefined : { title: Object.getOwnPropertyNames(req.user.permissions) } 
     try {
         const post = await getTenantDb(req.user).model(`${req.user.id}-sections`, sectionSchema, "sections").find(permissions)
-        res.send(post);
+        res.status(200).send(post);
     } catch (error) {
         res.status(500);
     }
@@ -52,42 +52,73 @@ const listSections = async (req, res) => {
 const listCategories = async (req, res) => {
     try {
         const post = await getTenantDb(req.user).model(`${req.user.id}-categories`, sectionSchema, "categories").find()
-        res.send(post);
+        res.status(200).send(post);
     } catch (error) {
         res.status(500);
     }
 }
 
 const addData = async (req, res) => {
-    const collection = typeSet.includes(req.params.id.split("-")[0]) ? req.params.id : "finances"
-    try {
-        const post = getTenantDb(req.user).model(`${req.user.id}-${collection}`, collection === "finances" ? financialSchema : sectionSchema, collection)
-        const add = new post(req.body)
-        await add.save();
-        res.send(add);
-    } catch (error) {
-        res.status(500);
+    const collection = typeSet.includes(req.params.id) ? req.params.id : "finances"
+
+    const submit = async () => {
+        try {
+            const post = getTenantDb(req.user).model(`${req.user.id}-${collection}`, collection === "finances" ? financialSchema : sectionSchema, collection)
+            const add = new post(req.body)
+            await add.save();
+            res.status(200).send(add);
+        } catch (error) {
+            res.status(500);
+        }
     }
+
+    if (collection === "categories") {
+        submit()
+    }
+    if (collection === "sections" && req.user.id === defaultDB) {
+        submit()
+    }
+    else if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
+        submit()
+    }
+    else res.status(403).send({message: "Forbidden"})
 }
 
 const patchData = async (req, res) => {
-    try {
-        const post = await getTenantDb(req.user).model(`${req.user.id}-${req.params.id}`, financialSchema, "finances").findByIdAndUpdate(req.body._id , req.body)
-        await post.save();
-        res.send(req.body);
-    } catch {
-		res.status(404)
-	}
+    if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
+        try {
+            const post = await getTenantDb(req.user).model(`${req.user.id}-${req.params.id}`, financialSchema, "finances").findByIdAndUpdate(req.body._id , req.body)
+            await post.save();
+            res.status(200).send(req.body);
+        } catch {
+	    	res.status(404)
+	    }
+    }
+    else res.status(403).send({message: "Forbidden cost centre"})
 }
 
 const deleteData = async (req, res) => {
-    const collection = typeSet.includes(req.params.id.split("-")[0]) ? req.params.id.split("-")[0] : "finances"
-    try {
-        await getTenantDb(req.user).model(`${req.user.id}-${req.params.id}`, financialSchema, collection).findByIdAndRemove(req.body._id)
-        res.status(204).send()
-    } catch {
-		res.status(404)
-	}
+    const collection = typeSet.includes(req.params.id) ? req.params.id.split("-")[0] : "finances"
+    
+    const submit = async () => {
+        try {
+            await getTenantDb(req.user).model(`${req.user.id}-${req.params.id}`, financialSchema, collection).findByIdAndRemove(req.body._id)
+            res.status(204).send()
+        } catch {
+	    	res.status(404)
+	    }
+    }
+    
+    if (collection === "categories") {
+        submit()
+    }
+    if (collection === "sections" && req.user.id === defaultDB) {
+        submit()
+    }
+    else if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
+        submit()
+    }
+    else res.status(403).send({message: "Forbidden cost centre"})
 }
 
 const checkBody = (req,res,next) => {
@@ -109,7 +140,7 @@ const checkCollection = async (req,res,next) => {
         next()
     }
     else {
-        return res.status(400).json({ message: "Couldn't find section" })
+        return res.status(404).json({ message: "Couldn't find cost centre" })
     }
 }
 

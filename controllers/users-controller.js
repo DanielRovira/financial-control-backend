@@ -1,4 +1,5 @@
-const User = require('../models/User');
+const mongoose = require("mongoose")
+const { User, Session } = require('../models/User');
 
 const isAdminAuthenticated = (req, res, next)=>{
     if (req.user) {
@@ -30,6 +31,7 @@ const patchUserData = async (req, res) => {
     try {
         const post = await User.findByIdAndUpdate(req.params.id , req.body)
         await post.save();
+        await Session.deleteMany({ 'session.passport.user.id': req.params.id})
         res.send(req.body);
     } catch {
 		res.status(404)

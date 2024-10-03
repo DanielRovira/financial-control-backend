@@ -30,7 +30,7 @@ app.use(session({
     store: new MongoDBStore({
         uri: process.env.DB_URL,
         databaseName: 'USERS',
-        collection: 'LoginSessions',
+        collection: 'loginsessions',
     }),
     cookie: {
         httpOnly: true,

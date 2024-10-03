@@ -1,6 +1,8 @@
 const mongoose = require("mongoose")
 const { purchaseSchema } = require('../models/Purchase');
 
+const defaultDB = process.env.DEFAULT_USER_DB
+
 const getTenantDb = (user) => {
     // const userDatabase = user.database ? user.database : user.id
     const databaseId = process.env.DEFAULT_USER_DB || user.id
@@ -9,8 +11,11 @@ const getTenantDb = (user) => {
 }
 
 const listData = async (req, res) => {
+    let collections = Object.getOwnPropertyNames(req.user.permissions || {})
+    let permissions = req.user.id === defaultDB ? undefined : { costCenter: collections.filter(each => Object.entries(req.user.permissions[each]).filter(each => each[0].includes('purchases'))[0].includes('purchases')) } 
+
     try {
-        const post = await getTenantDb(req.user).model(`listData-${req.user.id}`, purchaseSchema, "purchases").find()
+        const post = await getTenantDb(req.user).model(`listData-${req.user.id}`, purchaseSchema, "purchases").find(permissions)
         res.send({post, status: 200});
     } catch (error) {
         res.status(500);

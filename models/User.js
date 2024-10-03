@@ -22,8 +22,23 @@ const userSchema = new Schema({
     }
 });
 
-const myDB = mongoose.connection.useDb('USERS');
+const sessionSchema = new Schema({
+    expires: {
+        type: String,
+        required: true,
+    },
+    session: {
+        type: Object,
+        required: true,
+    }
+});
 
-module.exports = myDB.model('User', userSchema);
+const myDB = mongoose.connection.useDb('USERS', { useCache: true });
+
+const User = myDB.model('user', userSchema)
+const Session = myDB.model('loginsession', sessionSchema)
+
+// module.exports = myDB.model('User', userSchema);
+module.exports = { User, Session };
 
 // users

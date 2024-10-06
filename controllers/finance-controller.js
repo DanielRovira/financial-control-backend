@@ -18,7 +18,7 @@ const listData = async (req, res) => {
 
     const submit = async () => {
         try {
-            const post = await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, "finances").find({ costCenter: collection , status: sheetType })
+            const post = await getTenantDb(req.user).model(`${req.user.id}-${collection}`, financialSchema, "finances").find({ costCenter: collection === 'TRASH' ? { $exists: 1 } : collection , status: sheetType, deleted: collection === 'TRASH' ? true : [undefined, false] })
             res.status(200).send({post, status: 200});
         } catch (error) {
             res.status(500);
@@ -115,7 +115,10 @@ const deleteData = async (req, res) => {
     if (collection === "sections" && req.user.id === defaultDB) {
         submit()
     }
-    else if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
+    // else if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
+    //     submit()
+    // }
+    else if (req.user.id === defaultDB) {
         submit()
     }
     else res.status(403).send({message: "Forbidden cost centre"})

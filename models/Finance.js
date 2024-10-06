@@ -17,6 +17,7 @@ const financialSchema = new Schema({
     costCenter: String,
     archived: Boolean,
     status: String,
+    deleted: Boolean,
 },
 {
     versionKey: false // You should be aware of the outcome after set to false

@@ -34,7 +34,7 @@ function(accessToken, refreshToken, profile, cb) {
 
 passport.serializeUser(function(user, cb) {
     process.nextTick(function() {
-        cb(null, { id: user.id, email: user.email, name: user.name, permissions: user.permissions });
+        cb(null, { id: user.id, email: user.email, name: user.name, permissions: user.permissions, language: user.language });
     });
 });
 
@@ -46,7 +46,7 @@ passport.deserializeUser(function(user, cb) {
 
 router.post('/', passport.authenticate('local'),
     function(req, res) {
-        return res.status(200).json({ user: {name: req.user.name, email: req.user.email} });      
+        return res.status(200).json({ user: {name: req.user.name, email: req.user.email, language: req.user.language} });      
     }
 );
 

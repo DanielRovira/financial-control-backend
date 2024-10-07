@@ -19,7 +19,10 @@ const userSchema = new Schema({
     },
     permissions: {
         type: Object,
-    }
+    },
+    language: {
+        type: String,
+    },
 });
 
 const sessionSchema = new Schema({

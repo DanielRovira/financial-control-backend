@@ -30,7 +30,7 @@ const getUser = async (req, res, next) => {
 
     return res
     .status(200)
-    .json({ user: {name: user.name, email: user.email, permissions: user.permissions, type: type}, status: 200 });
+    .json({ user: {name: user.name, email: user.email, permissions: user.permissions, language: user.language, type: type}, status: 200 });
 };
 
 const signup = async (req, res, next) => {

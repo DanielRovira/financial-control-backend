@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 
 const isAuthenticated = (req, res, next)=>{
     if (req.user) {
+        req.defaultDB = process.env.DEFAULT_USER_DB || req.user.id;
         next()
     }
     else {return res.status(400).json({ message: "User Not Found", status: 400 })}
@@ -21,7 +22,7 @@ const getUser = async (req, res, next) => {
         return res.status(404).json({ messsage: "User Not Found" });
     }
 
-    if (userId === process.env.DEFAULT_USER_DB) {
+    if (userId === req.defaultDB) {
         type = "admin"
     }
     else {

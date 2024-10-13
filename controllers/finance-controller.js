@@ -2,11 +2,9 @@ const mongoose = require("mongoose")
 const { financialSchema, sectionSchema } = require('../models/Finance');
 
 const typeSet = ["sections", "categories"];
-const defaultDB = process.env.DEFAULT_USER_DB
 
 const getTenantDb = (user) => {
-    // const userDatabase = user.database ? user.database : user.id
-    const databaseId = defaultDB || user.id
+    const databaseId = process.env.DEFAULT_USER_DB || user.id
     const db = mongoose.connection.useDb(databaseId, { useCache: true });
     return db;
 }
@@ -25,7 +23,7 @@ const listData = async (req, res) => {
         }
     }
 
-    if (req.user.id === defaultDB) {
+    if (req.user.id === req.defaultDB) {
         submit() 
     }
     else {
@@ -40,7 +38,7 @@ const listData = async (req, res) => {
 }
 
 const listSections = async (req, res) => {
-    let permissions = req.user.id === defaultDB ? undefined : { title: Object.getOwnPropertyNames(req.user.permissions) } 
+    let permissions = req.user.id === req.defaultDB ? undefined : { title: Object.getOwnPropertyNames(req.user.permissions) } 
     try {
         const post = await getTenantDb(req.user).model(`${req.user.id}-sections`, sectionSchema, "sections").find(permissions)
         res.status(200).send(post);
@@ -75,17 +73,20 @@ const addData = async (req, res) => {
     if (collection === "categories") {
         submit()
     }
-    if (collection === "sections" && req.user.id === defaultDB) {
+    else if (collection === "sections" && req.user.id === req.defaultDB) {
         submit()
     }
     else if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
+        submit()
+    }
+    else if (req.user.id === req.defaultDB) {
         submit()
     }
     else res.status(403).send({message: "Forbidden"})
 }
 
 const patchData = async (req, res) => {
-    if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
+    const submit = async () => {
         try {
             const post = await getTenantDb(req.user).model(`${req.user.id}-${req.params.id}`, financialSchema, "finances").findByIdAndUpdate(req.body._id , req.body)
             await post.save();
@@ -93,6 +94,12 @@ const patchData = async (req, res) => {
         } catch {
 	    	res.status(404)
 	    }
+    }
+    if (req.user.id === req.defaultDB) {
+        submit() 
+    }
+    else if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
+        submit() 
     }
     else res.status(403).send({message: "Forbidden cost centre"})
 }
@@ -112,13 +119,13 @@ const deleteData = async (req, res) => {
     if (collection === "categories") {
         submit()
     }
-    if (collection === "sections" && req.user.id === defaultDB) {
+    if (collection === "sections" && req.user.id === req.defaultDB) {
         submit()
     }
     // else if (req.user.permissions?.[req.body.costCenter]?.[req.body.status] === "edit") {
     //     submit()
     // }
-    else if (req.user.id === defaultDB) {
+    else if (req.user.id === req.defaultDB) {
         submit()
     }
     else res.status(403).send({message: "Forbidden cost centre"})

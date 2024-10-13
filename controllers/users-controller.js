@@ -1,10 +1,9 @@
 const mongoose = require("mongoose")
 const { User, Session } = require('../models/User');
 
-const defaultDB = process.env.DEFAULT_USER_DB
-
 const isAdminAuthenticated = (req, res, next)=>{
     if (req.user) {
+        defaultDB = process.env.DEFAULT_USER_DB || req.user.id
         if (req.user.id === defaultDB) {
             next()
         }
@@ -33,7 +32,7 @@ const patchUserData = async (req, res) => {
     try {
         const post = await User.findByIdAndUpdate(req.params.id , req.body)
         await post.save();
-        req.user.id !== defaultDB && await Session.deleteMany({ 'session.passport.user.id': req.params.id})
+        req.user.id !== req.defaultDB && await Session.deleteMany({ 'session.passport.user.id': req.params.id})
         res.send(req.body);
     } catch {
         res.status(404)

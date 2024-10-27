@@ -13,6 +13,7 @@ const authRoutes = require("./routes/auth-routes");
 const usersRoutes = require("./routes/users-routes");
 const financeRoutes = require("./routes/finance-routes");
 const purchasesRoutes = require("./routes/purchases-routes");
+const tasksRoutes = require("./routes/tasks-routes");
 const fileUpload = require('express-fileupload');
 
 app.use(fileUpload());
@@ -55,6 +56,7 @@ app.use("/api", authRoutes);
 app.use(`/api/users`, usersRoutes);
 app.use(`/api/finances`, financeRoutes);
 app.use(`/api/purchases`, purchasesRoutes);
+app.use(`/api/tasks`, tasksRoutes);
 mongoose.set("strictQuery", false);     // Will be the default after Mongoose 7. Remove after that
 const connectionOptions = {
     // dbName: process.env.DB,

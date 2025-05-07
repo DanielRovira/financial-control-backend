@@ -38,7 +38,7 @@ const listData = async (req, res) => {
 }
 
 const listSections = async (req, res) => {
-    let permissions = req.user.id === req.defaultDB ? undefined : { title: Object.getOwnPropertyNames(req.user.permissions) } 
+    let permissions = req.user.id === req.defaultDB ? undefined : { title: Object.getOwnPropertyNames(req.user.permissions || []) } 
     try {
         const post = await getTenantDb(req.user).model(`${req.user.id}-sections`, sectionSchema, "sections").find(permissions)
         res.status(200).send(post);
